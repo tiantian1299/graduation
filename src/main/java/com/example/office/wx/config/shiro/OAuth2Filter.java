@@ -89,6 +89,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
             resp.setStatus(HttpStatus.SC_UNAUTHORIZED);
             resp.getWriter().print("无效的令牌");
             return false;
+
         }
 
         try {
