@@ -1,0 +1,77 @@
+sercer:
+  tomcat:
+    connection-timeout: 5000ms
+    port: 8080
+    servlet:
+      context-path: /online-wx-api
+    threads:
+      max: 200
+      min-spare: 30
+    uri-encoding: UTF-8
+
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      database: online_office
+      host: localhost
+      password: tian0603
+      port: 27017
+      username: tian
+
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initial-size: 8
+      max-active: 16
+      max-wait: 60000
+      min-idle: 8
+      password: tian0603
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      url: jdbc:mysql://localhost:3306/online_office?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      username: root
+    type: com.alibaba.druid.pool.DruidDataSource
+
+  redis:
+    database: 0
+    host: localhost
+    jedis:
+      pool:
+        max-active: 1000
+        max-idle: 16
+        max-wait: -1ms
+        min-idle: 8
+    password: tian0603
+    port: 6379
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.example.onlineoffice.wx.db.pojo #实体类所在的包
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启日志
+    map-underscore-to-camel-case: true #支持驼峰命名法
+
+  #日志输出
+logging:
+  level:
+    root: info
+    com.example.onlineoffice.wx.db.dao: warn #将dao接口的日志级别调高到警告级别
+  pattern:
+    console: "%d{HH:mm:ss}   %-5level  %msg%n"
+
+
+
+office:
+  jwt:
+    #秘钥
+    secret: tian0603
+    #过期时间
+    expire: 5
+    #缓存的过期时间
+    cache-expire: 10
+
+wx:
+  app-id: wx63a67d6eac5a6aa8
+  app-secret: b5d8b49028a587384545b61d8d04a396
