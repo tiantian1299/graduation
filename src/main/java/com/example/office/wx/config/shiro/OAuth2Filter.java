@@ -74,6 +74,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request,
                                      ServletResponse response) throws Exception {
+
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
