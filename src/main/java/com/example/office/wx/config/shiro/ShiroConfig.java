@@ -58,13 +58,10 @@ public class ShiroConfig {
         filterMap.put("/app/**", "anon");
         filterMap.put("/sys/login", "anon");
         filterMap.put("/swagger/**", "anon");
-        filterMap.put("/v2/api-docs", "anon");
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/swagger-resources/**", "anon");
-        filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/user/register", "anon");
         filterMap.put("/user/login", "anon");
-        filterMap.put("/test/**", "anon");
         // 设置拦截器拦截的路径
         filterMap.put("/**", "oauth2");
         shiroFilter.setFilterChainDefinitionMap(filterMap);

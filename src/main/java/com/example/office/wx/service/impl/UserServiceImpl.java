@@ -57,11 +57,11 @@ public class UserServiceImpl implements UserService {
                 tbUserMapper.insert(params);
                 Integer id = tbUserMapper.searchIdByOpenId(openId);
                 return id;
-            }else {
+            } else {
                 throw new OfficeException("已经存在超级管理员了");
             }
-        }else {
-
+        } else {
+            // 普通用户注册
         }
         return 0;
     }
@@ -93,25 +93,27 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 根据用户Id查询用户对应的权限
+     *
      * @param userId
      * @return
      */
     @Override
-    public Set<String> searchUserPermissions(int userId){
+    public Set<String> searchUserPermissions(int userId) {
         Set<String> permissions = tbUserMapper.searchUserPermissions(userId);
         return permissions;
     }
 
     /**
      * 用户登录
+     *
      * @param code 临时授权字符串
      * @return
      */
     @Override
-    public Integer login(String code){
+    public Integer login(String code) {
         String openId = getOpenId(code);
         Integer id = tbUserMapper.searchIdByOpenId(openId);
-        if(id == null){
+        if (id == null) {
             throw new OfficeException("员工不存在");
         }
         return id;

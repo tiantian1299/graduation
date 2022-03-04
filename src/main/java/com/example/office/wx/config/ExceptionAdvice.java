@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@Slf4j
-@RestControllerAdvice
 /**
  * 统一处理异常信息
  */
+@Slf4j
+@RestControllerAdvice
 public class ExceptionAdvice {
 
     @ResponseBody

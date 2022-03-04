@@ -43,7 +43,7 @@ public class UserController {
         int id = userService.registerUser(form.getRegisterCode(), form.getCode(), form.getNickname(), form.getPhoto());
         // 生成token
         String token = jwtUtil.createToken(id);
-        //查询用户所对应的权限
+        // 查询用户所对应的权限
         Set<String> permissions = userService.searchUserPermissions(id);
         //缓存令牌
         saveCacheToken(token, id);
@@ -52,7 +52,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation("登录系统")
-    public R login(@Valid @RequestBody LoginForm form){
+    public R login(@Valid @RequestBody LoginForm form) {
         int id = userService.login(form.getCode());
         //生成token字符串
         String token = jwtUtil.createToken(id);
@@ -60,7 +60,7 @@ public class UserController {
         saveCacheToken(token, id);
         //查询用户的权限列表
         Set<String> permissions = userService.searchUserPermissions(id);
-        return R.ok().put("token",token).put("permission",permissions);
+        return R.ok().put("token", token).put("permission", permissions);
     }
 
     /**

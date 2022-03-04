@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@Scope("prototype") // 设置这个类是多例的
+@Scope("prototype")
 public class OAuth2Filter extends AuthenticatingFilter {
 
     @Autowired
