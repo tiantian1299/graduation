@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.office.wx.db.mapper.SysConfigMapper">
+  <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.SysConfig">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="param_key" jdbcType="VARCHAR" property="paramKey" />
+    <result column="param_value" jdbcType="VARCHAR" property="paramValue" />
+    <result column="is_delete" jdbcType="BOOLEAN" property="isDelete" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, param_key, param_value, is_delete, remark
+  </sql>
+  <select id="selectAllParam" resultType="com.example.office.wx.db.pojo.SysConfig">
+    select param_key, param_value from sys_config where is_delete = false;
+  </select>
+</mapper>
