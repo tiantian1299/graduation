@@ -31,6 +31,7 @@ public class ExceptionAdvice {
             OfficeException exception = (OfficeException) e;
             return exception.getMsg();
         } else if (e instanceof UnauthorizedException) {
+            // shiro 权限认证错误
             return "你不具备相关权限";
         } else {
             return "后端执行异常";

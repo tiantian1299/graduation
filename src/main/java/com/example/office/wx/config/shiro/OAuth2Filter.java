@@ -1,7 +1,6 @@
 package com.example.office.wx.config.shiro;
 
 import cn.hutool.core.util.StrUtil;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
@@ -89,7 +88,6 @@ public class OAuth2Filter extends AuthenticatingFilter {
             resp.setStatus(HttpStatus.SC_UNAUTHORIZED);
             resp.getWriter().print("无效的令牌");
             return false;
-
         }
 
         try {
@@ -113,7 +111,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
                 resp.getWriter().print("令牌已经过期");
                 return false;
             }
-        } catch (JWTDecodeException e) {
+        } catch (Exception e) {
             resp.setStatus(HttpStatus.SC_UNAUTHORIZED);
             resp.getWriter().print("无效的令牌");
             return false;
