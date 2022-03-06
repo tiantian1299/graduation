@@ -7,6 +7,7 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.office.wx.exception.OfficeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,14 +25,14 @@ public class JwtUtil {
     private int expire;
 
     /**
-     * 根据过期时间、秘钥、userId生成过期字符串
+     * 根据过期时间、秘钥、userId生成token字符串
      *
      * @param userId
      * @return
      */
     public String createToken(int userId) {
         //当前时间偏移5天
-        Date date = DateUtil.offset(new Date(), DateField.DAY_OF_YEAR, 5);
+        Date date = DateUtil.offset(new Date(), DateField.DAY_OF_YEAR, expire).toJdkDate();
         //加密算法 生成秘钥
         Algorithm algorithm = Algorithm.HMAC256(secret);
         JWTCreator.Builder builder = JWT.create();
@@ -46,10 +47,14 @@ public class JwtUtil {
      * @return
      */
     public int getUserId(String token) {
-        //对token进行解码
-        DecodedJWT jwt = JWT.decode(token);
-        int usrId = jwt.getClaim("userId").asInt();
-        return usrId;
+        try {
+            //对token进行解码
+            DecodedJWT jwt = JWT.decode(token);
+            int usrId = jwt.getClaim("userId").asInt();
+            return usrId;
+        }catch (Exception e){
+            throw new OfficeException("令牌无效");
+        }
     }
 
     /**

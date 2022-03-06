@@ -29,17 +29,18 @@ public class SwaggerConfig {
 
         // ApiInfoBuilder 用于在Swagger界面上添加各种信息
         ApiInfoBuilder builder = new ApiInfoBuilder();
-        builder.title("EMOS在线办公系统");
+        builder.title("蒙商公司在线办公系统");
         ApiInfo apiInfo = builder.build();
         docket.apiInfo(apiInfo);
 
-        // ApiSelectorBuilder 用来设置哪些类中的方法会生成到REST API中
+        // ApiSelectorBuilder 用来设置哪些类中的方法会生成到 REST API中
         ApiSelectorBuilder selectorBuilder = docket.select();
         //所有包下的类
         selectorBuilder.paths(PathSelectors.any());
         //使用@ApiOperation的方法会被提取到REST API中
         selectorBuilder.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class));
         docket = selectorBuilder.build();
+
         /*
          * 下面的语句是开启对JWT的支持，当用户用Swagger调用受JWT认证保护的方法，
          * 必须要先提交参数（例如令牌）

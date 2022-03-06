@@ -77,7 +77,6 @@ public class OAuth2Filter extends AuthenticatingFilter {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
-
         resp.setHeader("Content-Type", "text/html;charset=UTF-8");
         //允许跨域请求
         resp.setHeader("Access-Control-Allow-Credentials", "true");
@@ -85,7 +84,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
 
         threadLocalToken.clear();
         //获取请求token，如果token不存在，直接返回401
-        String token = getRequestToken((HttpServletRequest) request);
+        String token = getRequestToken(req);
         if (StringUtils.isBlank(token)) {
             resp.setStatus(HttpStatus.SC_UNAUTHORIZED);
             resp.getWriter().print("无效的令牌");
@@ -114,7 +113,6 @@ public class OAuth2Filter extends AuthenticatingFilter {
                 resp.getWriter().print("令牌已经过期");
                 return false;
             }
-
         } catch (JWTDecodeException e) {
             resp.setStatus(HttpStatus.SC_UNAUTHORIZED);
             resp.getWriter().print("无效的令牌");
@@ -170,6 +168,12 @@ public class OAuth2Filter extends AuthenticatingFilter {
     @Override
     public void doFilterInternal(ServletRequest request,
                                  ServletResponse response, FilterChain chain) throws ServletException, IOException {
+        HttpServletRequest req= (HttpServletRequest) request;
+        HttpServletResponse resp= (HttpServletResponse) response;
+        resp.setContentType("text/html");
+        resp.setCharacterEncoding("UTF-8");
+        resp.setHeader("Access-Control-Allow-Credentials", "true");
+        resp.setHeader("Access-Control-Allow-Origin", req.getHeader("Origin"));
         super.doFilterInternal(request, response, chain);
     }
 }

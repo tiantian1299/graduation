@@ -34,6 +34,7 @@ public class R extends HashMap<String, Object> {
         return r;
     }
 
+    //Apache的httpcomponents库里面的HttpStatus类封装了很多状态码
     public static R error(String msg) {
         return error(HttpStatus.SC_INTERNAL_SERVER_ERROR, msg);
     }

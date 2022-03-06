@@ -1,20 +1,14 @@
 package com.example.office.wx.db.mapper;
 
-import com.example.office.wx.db.pojo.TbWorkday;
 import org.apache.ibatis.annotations.Mapper;
 
 
 @Mapper
 public interface TbWorkdayMapper {
-    int deleteByPrimaryKey(Integer id);
 
-    int insert(TbWorkday record);
-
-    int insertSelective(TbWorkday record);
-
-    TbWorkday selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(TbWorkday record);
-
-    int updateByPrimaryKey(TbWorkday record);
+    /**
+     * 判断当天是否是特使的工作日（周六周日）
+     * @return
+     */
+    Integer searchTodayIsWorkday();
 }

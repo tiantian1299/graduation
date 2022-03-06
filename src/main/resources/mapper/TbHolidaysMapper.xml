@@ -11,51 +11,7 @@
     <!--@mbg.generated-->
     id, `date`
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from tb_holidays
-    where id = #{id,jdbcType=INTEGER}
+  <select id="searchTodayIsHolidays" resultType="integer">
+    select id from tb_holidays where date = CURRENT_DATE LIMIT 1;
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from tb_holidays
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbHolidays" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into tb_holidays (`date`)
-    values (#{date,jdbcType=DATE})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbHolidays" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into tb_holidays
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="date != null">
-        `date`,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="date != null">
-        #{date,jdbcType=DATE},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.office.wx.db.pojo.TbHolidays">
-    <!--@mbg.generated-->
-    update tb_holidays
-    <set>
-      <if test="date != null">
-        `date` = #{date,jdbcType=DATE},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbHolidays">
-    <!--@mbg.generated-->
-    update tb_holidays
-    set `date` = #{date,jdbcType=DATE}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

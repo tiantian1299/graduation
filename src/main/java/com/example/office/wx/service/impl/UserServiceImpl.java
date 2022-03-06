@@ -4,6 +4,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.example.office.wx.db.mapper.TbUserMapper;
+import com.example.office.wx.db.pojo.TbUser;
 import com.example.office.wx.exception.OfficeException;
 import com.example.office.wx.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,8 @@ public class UserServiceImpl implements UserService {
                 String openId = getOpenId(code);
                 HashMap params = new HashMap();
                 params.put("openId", openId);
-                params.put("nickName", nickname);
+                params.put("nickname", nickname);
+                params.put("photo",photo);
                 //角色多个，json格式
                 params.put("role", "[0]");
                 params.put("status", 1);
@@ -117,5 +119,16 @@ public class UserServiceImpl implements UserService {
             throw new OfficeException("员工不存在");
         }
         return id;
+    }
+
+    /**
+     * 根据用户id 来查询用户信息
+     * @param userId
+     * @return
+     */
+    @Override
+    public TbUser searchById(int userId){
+        TbUser user = tbUserMapper.searchById(userId);
+        return user;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.office.wx.service;
 
+import com.example.office.wx.db.pojo.TbUser;
+
 import java.util.Set;
 
 public interface UserService {
@@ -28,4 +30,11 @@ public interface UserService {
      * @return
      */
     Integer login(String code);
+
+    /**
+     * 根据用户id 来查询用户信息
+     * @param userId
+     * @return
+     */
+    TbUser searchById(int userId);
 }

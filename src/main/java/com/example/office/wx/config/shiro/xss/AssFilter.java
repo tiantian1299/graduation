@@ -1,4 +1,4 @@
-package com.example.office.wx.config.xss;
+package com.example.office.wx.config.shiro.xss;
 
 
 import javax.servlet.*;
