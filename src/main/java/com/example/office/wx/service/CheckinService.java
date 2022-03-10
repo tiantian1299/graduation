@@ -1,5 +1,8 @@
 package com.example.office.wx.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public interface CheckinService {
 
     /**
@@ -9,4 +12,31 @@ public interface CheckinService {
      * @return
      */
     String validCancheckin(int userId,String date);
+
+    /**
+     * 在线签到
+     * @param params
+     */
+    void checkin(HashMap params ,int userId);
+
+    /**
+     * 查询当天的考勤
+     * @param userId
+     * @return
+     */
+    HashMap queryTodayCheckin(int userId);
+
+    /**
+     * 查询用户的累计签到天数
+     * @param userId
+     * @return
+     */
+    Long queryCheckinDays(int userId);
+
+    /**
+     * 查询用户一周的签到情况
+     * @param parms
+     * @return
+     */
+    ArrayList<HashMap> queryWeekCheckin(HashMap parms);
 }

@@ -2,6 +2,9 @@ package com.example.office.wx.db.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 @Mapper
 public interface TbHolidaysMapper {
@@ -10,4 +13,11 @@ public interface TbHolidaysMapper {
      * @return
      */
     Integer searchTodayIsHolidays();
+
+    /**
+     * 查询某个时间段是否有特殊节假日
+     * @param params
+     * @return
+     */
+    ArrayList<String> searchHoliday(HashMap params);
 }
