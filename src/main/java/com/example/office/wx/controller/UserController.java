@@ -53,7 +53,7 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation("登录系统")
     public R login(@Valid @RequestBody LoginForm form) {
-        int id = userService.login(form.getCode());
+            int id = userService.login(form.getCode());
         //生成token字符串
         String token = jwtUtil.createToken(id);
         //将token写入缓存中

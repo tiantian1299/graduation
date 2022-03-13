@@ -29,7 +29,7 @@ public class TbMeeting {
     /**
     * 日期
     */
-    private Date date;
+    private String date;
 
     /**
     * 开会地点
@@ -39,12 +39,12 @@ public class TbMeeting {
     /**
     * 开始时间
     */
-    private Date start;
+    private String start;
 
     /**
     * 结束时间
     */
-    private Date end;
+    private String end;
 
     /**
     * 会议类型（1在线会议，2线下会议）
@@ -67,7 +67,7 @@ public class TbMeeting {
     private String instanceId;
 
     /**
-    * 状态（1未开始，2进行中，3已结束）
+    * 状态（1待审批，2审批不通过，3未开始，4进行中，5已结束）
     */
     private Short status;
 
@@ -85,6 +85,7 @@ public class TbMeeting {
     }
 
     public String getUuid() {
+        
         return uuid;
     }
 
@@ -108,11 +109,11 @@ public class TbMeeting {
         this.creatorId = creatorId;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -124,19 +125,19 @@ public class TbMeeting {
         this.place = place;
     }
 
-    public Date getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 

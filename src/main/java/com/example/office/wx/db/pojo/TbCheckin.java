@@ -47,12 +47,12 @@ public class TbCheckin implements Serializable {
     private String district;
 
     /**
-     * 考勤结果
+     * 考勤结果 (1 正常 2 迟到)
      */
     private Byte status;
 
     /**
-     * 风险等级
+     * 风险等级（1低风险  2中风险  3高风险）
      */
     private Integer risk;
 

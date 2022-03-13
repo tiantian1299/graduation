@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
                 String openId = getOpenId(code);
                 HashMap params = new HashMap();
                 params.put("openId", openId);
-                params.put("nickname", nickname);
+                params.put("nickname", "天天小可爱");
                 params.put("photo",photo);
                 //角色多个，json格式
                 params.put("role", "[0]");
@@ -130,5 +130,15 @@ public class UserServiceImpl implements UserService {
     public TbUser searchById(int userId){
         TbUser user = tbUserMapper.searchById(userId);
         return user;
+    }
+
+    /**
+     * 查询用户的入职日期
+     * @param userId
+     * @return
+     */
+    @Override
+    public String queryUserHiredate(int userId) {
+        return tbUserMapper.queryUserHiredate(userId);
     }
 }

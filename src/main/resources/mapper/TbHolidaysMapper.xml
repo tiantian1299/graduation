@@ -17,6 +17,6 @@
   <select id="searchHoliday" parameterType="HashMap" resultType="String">
     select date
     from tb_holidays
-    where date between #{startDate} AND #{endDate}
+    where date between #{startTime} AND #{endTime}
   </select>
 </mapper>

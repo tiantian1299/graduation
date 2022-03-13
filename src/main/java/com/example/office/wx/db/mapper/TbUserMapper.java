@@ -45,4 +45,11 @@ public interface TbUserMapper {
      * @return
      */
     TbUser searchById(int userId);
+
+    /**
+     * 查询用户的入职日期
+     * @param userId
+     * @return
+     */
+    String queryUserHiredate(int userId);
 }

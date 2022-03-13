@@ -35,8 +35,15 @@ public interface CheckinService {
 
     /**
      * 查询用户一周的签到情况
-     * @param parms
+     * @param params
      * @return
      */
-    ArrayList<HashMap> queryWeekCheckin(HashMap parms);
+    ArrayList<HashMap> queryWeekCheckin(HashMap params);
+
+    /**
+     * 查询用户一个月的签到情况
+     * @param params
+     * @return
+     */
+    ArrayList<HashMap> queryMonthCheckin(HashMap params);
 }

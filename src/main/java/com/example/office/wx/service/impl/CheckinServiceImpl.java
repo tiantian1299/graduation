@@ -1,5 +1,7 @@
 package com.example.office.wx.service.impl;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateRange;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -44,6 +46,26 @@ public class CheckinServiceImpl implements CheckinService {
 
     @Autowired
     private TbCheckinMapper tbCheckinMapper;
+
+    public static void main(String[] args) {
+        DateTime startDate = DateUtil.parseDate("2022-03-7");
+        DateTime endDate = DateUtil.parseDate("2022-03-13");
+        DateRange range = DateUtil.range(startDate, endDate, DateField.DAY_OF_MONTH);
+        for (DateTime date : range) {
+            System.out.println(date);
+            System.out.println(date.dayOfWeekEnum().toChinese("周"));
+        }
+        DateTime dateTime = DateUtil.parseDate("2022-02-3");
+        // yyyy-mm-dd hh:mm:ss
+        System.out.println(dateTime);
+        // yyyy-mm-dd hh:mm:ss
+        System.out.println(DateUtil.date());
+        //yyyy-mm-dd
+        System.out.println("今天：" + DateUtil.today());
+
+        DateTime endTime = DateUtil.parse(DateUtil.today() + " 22:33:33");
+        System.out.println(DateUtil.compare(DateUtil.date(), endTime));
+    }
 
     /**
      * 验证是否可以签到
@@ -91,18 +113,17 @@ public class CheckinServiceImpl implements CheckinService {
         }
     }
 
-
     /**
      * 在线签到
      *
      * @param params
      */
     @Override
-    public void checkin(HashMap params,int userId) {
+    public void checkin(HashMap params, int userId) {
         //当前时间
         Date now = DateUtil.date();
         //上班时间
-        Date start = DateUtil.parse(DateUtil.today() + " " + constants.workStartTime);
+        Date start = DateUtil.parse(DateUtil.today() + " " + constants.workTime);
         //签到结束时间
         Date end = DateUtil.parse(DateUtil.today() + " " + constants.workEndTime);
         int status = 1;
@@ -165,31 +186,105 @@ public class CheckinServiceImpl implements CheckinService {
 
     /**
      * 查询用户当天的考勤记录
+     *
      * @param userId
      * @return
      */
     @Override
     public HashMap queryTodayCheckin(int userId) {
-        return null;
+        return tbCheckinMapper.queryTodayCheckin(userId);
     }
 
     /**
      * 查询用户的累计考勤天数
+     *
      * @param userId
      * @return
      */
     @Override
     public Long queryCheckinDays(int userId) {
-        return null;
+        return tbCheckinMapper.queryCheckinDays(userId);
     }
 
     /**
      * 查询一周的考勤记录
-     * @param parms
+     *
+     * @param params
      * @return
      */
     @Override
-    public ArrayList<HashMap> queryWeekCheckin(HashMap parms) {
-        return null;
+    public ArrayList<HashMap> queryWeekCheckin(HashMap params) {
+        //查询一周中特殊的工作日
+        ArrayList<String> workday = workdayMapper.searchWorkday(params);
+        //查询一周中特殊的节假日
+        ArrayList<String> holiday = holidaysMapper.searchHoliday(params);
+        //查询一周中用户的考勤情况
+        ArrayList<HashMap> weekCheckin = tbCheckinMapper.queryWeekCheckin(params);
+
+        //一周开始时间
+        DateTime startTime = DateUtil.parseDate(params.get("startTime").toString());
+        //一周结束时间
+        DateTime endTime = DateUtil.parseDate(params.get("endTime").toString());
+        //生成 n 天的日期对象  参数：（开始时间，结束时间，以天为单位）
+        DateRange range = DateUtil.range(startTime, endTime, DateField.DAY_OF_MONTH);
+        ArrayList<HashMap> list = new ArrayList();
+        for (DateTime date : range) {
+            String temp = date.toString("yyyy-MM-dd");
+            String type = "工作日";
+            if (date.isWeekend()) {
+                type = "节假日";
+            }
+            //判断是否是特殊的节假日或工作日
+            if (workday != null && workday.contains(temp)) {
+                type = "工作日";
+            }
+            if (holiday != null && holiday.contains(temp)) {
+                type = "节假日";
+            }
+
+            //判断考勤状态
+            String status = "";
+            if (type == "工作日" && DateUtil.compare(date, DateUtil.date()) <= 0) {
+                //如果是工作日，而且时间是是在当前日期之前
+                status = "缺勤";
+                //查询周考勤记录中是否有当天考勤
+                boolean flag = false;
+                for (HashMap map : weekCheckin) {
+                    if (map.containsValue(temp)) {
+                        status = (String) map.get("status");
+                        flag = true;
+                        break;
+                    }
+                }
+
+                //工作日，但是考勤时间还没有结束  （DateUtil.today() ==> yyyy-mm-dd）
+                DateTime workEndTime = DateUtil.parse(DateUtil.today() + " " + constants.workEndTime);
+                String today = DateUtil.today();
+                //当前日期恰好是今天， 而且还没有到打卡日期
+                if (today.equals(temp) && DateUtil.compare(DateUtil.date(), workEndTime) <= 0 && flag == false) {
+                    status = "";
+                }
+            }
+
+            //封装返回对象
+            HashMap map = new HashMap();
+            map.put("date", temp);
+            map.put("type", type);
+            map.put("status", status);
+            map.put("day", date.dayOfWeekEnum().toChinese("周"));
+            list.add(map);
+        }
+        return list;
     }
+
+    /**
+     * 查询用户一个月的签到情况
+     * @param params
+     * @return
+     */
+    @Override
+    public ArrayList<HashMap> queryMonthCheckin(HashMap params){
+        return queryWeekCheckin(params);
+    }
+
 }

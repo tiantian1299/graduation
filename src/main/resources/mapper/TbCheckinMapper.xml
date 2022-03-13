@@ -54,7 +54,7 @@
         create_time = #{createTime}
     </insert>
     <select id="queryTodayCheckin" parameterType="int" resultType="HashMap">
-        SELECT u.NAME,
+        SELECT u.name,
                u.photo,
                d.dept_name                          AS deptName,
                ck.address,
@@ -101,7 +101,7 @@ IF
         WHERE
             user_id = #{userId}
 
-          AND date BETWEEN #{startDate}
-          and #{endDate}
+          AND date BETWEEN #{startTime}
+          and #{endTime}
     </select>
 </mapper>

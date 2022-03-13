@@ -31,7 +31,7 @@
     </select>
     <insert id="insert" parameterType="HashMap">
         INSERT INTO tb_user
-                SET
+        SET
         <if test="openId != null">
             open_id = #{openId},
         </if>
@@ -57,12 +57,12 @@
             hiredate = #{hiredate},
         </if>
         role = #{role},
-                root = #{root},
+        root = #{root},
         <if test="deptName != null">
             dept_id = ( SELECT id FROM tb_dept WHERE dept_name = #{deptName} ),
         </if>
         status = #{status},
-                create_time = #{createTime}
+        create_time = #{createTime}
     </insert>
     <!--根据openId查询员工的主键值-->
     <select id="searchIdByOpenId" parameterType="String" resultType="integer">
@@ -74,15 +74,22 @@
     <select id="searchUserPermissions" parameterType="int" resultType="String">
         SELECT DISTINCT p.permission_name
         FROM tb_user u
-                     JOIN tb_role r on JSON_CONTAINS(u.role, cast(r.id AS CHAR))
-                     JOIN tb_permission p on JSON_CONTAINS(r.permissions, cast(p.id AS CHAR))
+                 JOIN tb_role r on JSON_CONTAINS(u.role, cast(r.id AS CHAR))
+                 JOIN tb_permission p on JSON_CONTAINS(r.permissions, cast(p.id AS CHAR))
         where u.id = #{userId}
           and u.status = 1
     </select>
     <select id="searchById" parameterType="int" resultType="com.example.office.wx.db.pojo.TbUser">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from tb_user
         where id = #{userId} and status = 1
+    </select>
+
+    <select id="queryUserHiredate" parameterType="int" resultType="string">
+        select hiredate
+        from tb_user
+        where id = #{userId}
+          and status = 1
     </select>
 </mapper>
