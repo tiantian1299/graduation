@@ -13,73 +13,16 @@
     <!--@mbg.generated-->
     id, permission_name, module_id, action_id
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from tb_permission
-    where id = #{id,jdbcType=INTEGER}
+  <select id="queryPermissionByRoleId" parameterType="int" resultType="map">
+    SELECT
+      p.id,
+      m.module_name AS moduleName,
+      a.action_name AS actionName,
+      IF(r.id IS NOT NULL,TRUE,FALSE) AS selected
+    FROM  tb_permission p
+            JOIN tb_module m ON p.module_id=m.id
+            JOIN tb_action a ON p.action_id=a.id
+            LEFT JOIN tb_role r ON JSON_CONTAINS ( r.permissions, CAST( p.id AS CHAR ) ) AND r.id= #{id}
+    ORDER BY p.module_id,p.id
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from tb_permission
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbPermission" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into tb_permission (permission_name, module_id, action_id
-      )
-    values (#{permissionName,jdbcType=VARCHAR}, #{moduleId,jdbcType=INTEGER}, #{actionId,jdbcType=INTEGER}
-      )
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbPermission" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into tb_permission
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="permissionName != null">
-        permission_name,
-      </if>
-      <if test="moduleId != null">
-        module_id,
-      </if>
-      <if test="actionId != null">
-        action_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="permissionName != null">
-        #{permissionName,jdbcType=VARCHAR},
-      </if>
-      <if test="moduleId != null">
-        #{moduleId,jdbcType=INTEGER},
-      </if>
-      <if test="actionId != null">
-        #{actionId,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.office.wx.db.pojo.TbPermission">
-    <!--@mbg.generated-->
-    update tb_permission
-    <set>
-      <if test="permissionName != null">
-        permission_name = #{permissionName,jdbcType=VARCHAR},
-      </if>
-      <if test="moduleId != null">
-        module_id = #{moduleId,jdbcType=INTEGER},
-      </if>
-      <if test="actionId != null">
-        action_id = #{actionId,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbPermission">
-    <!--@mbg.generated-->
-    update tb_permission
-    set permission_name = #{permissionName,jdbcType=VARCHAR},
-      module_id = #{moduleId,jdbcType=INTEGER},
-      action_id = #{actionId,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>
