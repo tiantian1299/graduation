@@ -46,6 +46,12 @@ spring:
     password: tian0603
     port: 6379
 
+  mail:
+    default-encoding: UTF-8
+    host: smtp.163.com
+    username: 17610405963@163.com
+    password: CQXEZPYFUXXEDGGB
+
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.example.onlineoffice.wx.db.pojo #实体类所在的包
@@ -75,3 +81,10 @@ office:
 wx:
   app-id: wx63a67d6eac5a6aa8
   app-secret: b5d8b49028a587384545b61d8d04a396
+
+
+email:
+  default-encoding: UTF-8
+  host: smtp.163.com
+  username: 17610405963@163.com
+  password: CQXEZPYFUXXEDGGB

@@ -12,61 +12,26 @@
     <!--@mbg.generated-->
     id, role_name, permissions
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from tb_role
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from tb_role
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbRole" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into tb_role (role_name, permissions)
-    values (#{roleName,jdbcType=VARCHAR}, #{permissions,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbRole" useGeneratedKeys="true">
-    <!--@mbg.generated-->
+  <insert id="addRole" parameterType="com.example.office.wx.db.pojo.TbRole">
     insert into tb_role
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="roleName != null">
-        role_name,
-      </if>
-      <if test="permissions != null">
-        permissions,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="roleName != null">
-        #{roleName,jdbcType=VARCHAR},
-      </if>
-      <if test="permissions != null">
-        #{permissions,jdbcType=VARCHAR},
-      </if>
-    </trim>
+    set role_name=#{roleName},permissions=#{permissions}
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.office.wx.db.pojo.TbRole">
-    <!--@mbg.generated-->
-    update tb_role
-    <set>
-      <if test="roleName != null">
-        role_name = #{roleName,jdbcType=VARCHAR},
-      </if>
-      <if test="permissions != null">
-        permissions = #{permissions,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
+  <update id="updateRolePermissions" parameterType="com.example.office.wx.db.pojo.TbRole">
+    UPDATE tb_role
+    SET permissions=#{permissions}
+    WHERE id=#{id}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbRole">
-    <!--@mbg.generated-->
-    update tb_role
-    set role_name = #{roleName,jdbcType=VARCHAR},
-      permissions = #{permissions,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+  <select id="searchAllRole" resultType="com.example.office.wx.db.pojo.TbRole">
+    SELECT id, role_name FROM tb_role ORDER BY id;
+  </select>
+  <select id="searchRoleUsersCount" parameterType="int" resultType="long">
+    SELECT COUNT(*) AS count
+    FROM tb_user u
+      JOIN tb_role r ON JSON_CONTAINS(u.role, CAST(r.id AS CHAR))
+    WHERE r.id=#{id};
+  </select>
+  <delete id="deleteRoleById" parameterType="int">
+    DELETE FROM tb_role WHERE id=#{id}
+  </delete>
+
 </mapper>

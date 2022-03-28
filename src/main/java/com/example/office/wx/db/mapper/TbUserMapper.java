@@ -3,6 +3,7 @@ package com.example.office.wx.db.mapper;
 import com.example.office.wx.db.pojo.TbUser;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -52,4 +53,54 @@ public interface TbUserMapper {
      * @return
      */
     String queryUserHiredate(int userId);
+
+    /**
+     * 根据部门id查询该部门下的用户总人数
+     * @param deptId
+     * @return
+     */
+    long searchUserCountInDept(int deptId);
+
+    /**
+     * 按照部门查询用户信息
+     * @param keyword
+     * @return
+     */
+    ArrayList<HashMap> searchUserGroupByDept(String keyword);
+
+    /**
+     * 往员工表中插入一条记录
+     *
+     * @param entity
+     * @return
+     */
+    int insertUser(TbUser entity);
+
+    /**
+     * 用户注册绑定openId，头像、和网名
+     * @param param
+     * @return
+     */
+    int activeUserAccount(HashMap param);
+
+    /**
+     * 查询用户的基本信息
+     * @param userId
+     * @return
+     */
+    HashMap searchUserSummary(int userId);
+
+    /**
+     * 更新用户信息
+     * @param tbUser
+     * @return
+     */
+    int updateUserInfo(TbUser tbUser);
+
+    /**
+     * 查询员工的基本信息
+     * @param userId
+     * @return
+     */
+    HashMap searchUserInfo(int userId);
 }

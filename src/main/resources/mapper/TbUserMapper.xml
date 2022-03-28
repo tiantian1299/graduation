@@ -92,4 +92,92 @@
         where id = #{userId}
           and status = 1
     </select>
+
+    <select id="searchUserCountInDept" parameterType="int" resultType="long">
+        SELECT COUNT(*) AS count
+        FROM tb_user
+        WHERE dept_id=#{deptId} AND status = 1
+    </select>
+
+    <select id="searchUserGroupByDept" parameterType="String" resultType="HashMap">
+        SELECT
+        d.id AS deptId,
+        d.dept_name AS deptName,
+        u.id AS userId,
+        u.name
+        FROM tb_dept d JOIN tb_user u ON u.dept_id=d.id
+        WHERE u.status=1
+        <if test="keyword!=null">
+            AND u.name LIKE '%${keyword}%'
+        </if>
+        ORDER BY d.id, u.id;
+    </select>
+
+    <insert id="insertUser" parameterType="com.example.office.wx.db.pojo.TbUser" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO tb_user
+        SET
+        <if test="openId != null">
+            open_id = #{openId},
+        </if>
+        <if test="nickname != null">
+            nickname = #{nickname},
+        </if>
+        <if test="photo != null">
+            photo = #{photo},
+        </if>
+        <if test="name != null">
+            name = #{name},
+        </if>
+        <if test="sex != null">
+            sex = #{sex},
+        </if>
+        <if test="tel != null">
+            tel = #{tel},
+        </if>
+        <if test="email != null">
+            email=#{email},
+        </if>
+        <if test="hiredate != null">
+            hiredate = #{hiredate},
+        </if>
+        role = #{role},
+        root = #{root},
+        <if test="deptId != null">
+            dept_id = #{deptId},
+        </if>
+        status = #{status},
+        create_time = #{createTime}
+    </insert>
+    <update id="activeUserAccount" parameterType="HashMap">
+        UPDATE tb_user
+        SET open_id=#{openId},
+            nickname=#{nickname},
+            photo=#{photo}
+        WHERE id=#{userId} AND status = 1
+    </update>
+    <select id="searchUserSummary" parameterType="int" resultType="HashMap">
+        SELECT u.name, u.photo, d.dept_name AS deptName
+        FROM tb_user u LEFT JOIN tb_dept d ON u.dept_id=d.id
+        WHERE u.id=#{userId} AND u.status = 1
+    </select>
+    <update id="updateUserInfo" parameterType="com.example.office.wx.db.pojo.TbUser">
+        UPDATE tb_user
+        SET name = #{name},
+            sex = #{sex},
+            dept_id =#{deptId},
+            tel=#{tel},
+            email=#{email},
+            hiredate=#{hiredate},
+            role=#{role},
+            status=#{status},
+            root=#{root}
+        WHERE id = #{userId} AND status = 1
+    </update>
+
+    <select id="searchUserInfo" parameterType="int" resultType="java.util.HashMap">
+        select name ,sex,dept_id,tel,email,hiredate,role,status,root
+        from tb_user
+        where id = #{userId}
+    </select>
+
 </mapper>

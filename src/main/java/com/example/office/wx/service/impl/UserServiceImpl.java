@@ -1,18 +1,27 @@
 package com.example.office.wx.service.impl;
 
 import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.example.office.wx.controller.form.InsertUserForm;
+import com.example.office.wx.controller.form.UpdateUserInfoForm;
+import com.example.office.wx.db.mapper.TbDeptMapper;
 import com.example.office.wx.db.mapper.TbUserMapper;
 import com.example.office.wx.db.pojo.TbUser;
 import com.example.office.wx.exception.OfficeException;
+import com.example.office.wx.service.DeptService;
 import com.example.office.wx.service.UserService;
+import com.example.office.wx.task.ActiveCodeTask;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
@@ -29,6 +38,18 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TbUserMapper tbUserMapper;
+
+    @Autowired
+    private TbDeptMapper tbDeptMapper;
+
+    @Autowired
+    private ActiveCodeTask activeCodeTask;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    DeptService deptService;
 
     /**
      * 注册新用户
@@ -62,10 +83,26 @@ public class UserServiceImpl implements UserService {
             } else {
                 throw new OfficeException("已经存在超级管理员了");
             }
-        } else {
-            // 普通用户注册
+        } else if (!redisTemplate.hasKey(registerCode)){
+            //判断验证码是否有效
+            throw new OfficeException("无效的验证码");
+        }else{
+            // 根据key值获取value值
+            int userId = Integer.parseInt(redisTemplate.opsForValue().get(registerCode).toString());
+            String openId = getOpenId(code);
+            HashMap param = new HashMap();
+            param.put("openId", openId);
+            param.put("nickname", nickname);
+            param.put("photo", photo);
+            param.put("userId", userId);
+            int row = tbUserMapper.activeUserAccount(param);
+            if (row != 1) {
+                throw new OfficeException("账号激活失败");
+            }
+            // 删除缓存中的激活码
+            redisTemplate.delete(registerCode);
+            return userId;
         }
-        return 0;
     }
 
     /**
@@ -140,5 +177,107 @@ public class UserServiceImpl implements UserService {
     @Override
     public String queryUserHiredate(int userId) {
         return tbUserMapper.queryUserHiredate(userId);
+    }
+
+    /**
+     * 按照部门分组查询用户信息
+     * @param keyword
+     * @return
+     */
+    @Override
+    public ArrayList<HashMap> searchUserGroupByDept(String keyword) {
+        ArrayList<HashMap> deptMembers = tbDeptMapper.searchDeptMembers(keyword);
+        ArrayList<HashMap> userGroupByDept = tbUserMapper.searchUserGroupByDept(keyword);
+        //处理返回结果
+        for (HashMap map1 : deptMembers) {
+            long deptId = (Long) map1.get("id");
+            ArrayList members = new ArrayList();
+            for (HashMap map2 : userGroupByDept) {
+                long id = (Long) map2.get("deptId");
+                if (deptId == id) {
+                    members.add(map2);
+                }
+            }
+            map1.put("members", members);
+        }
+        return deptMembers;
+    }
+
+
+    /**
+     * 新增员工
+     * @param form
+     */
+    @Override
+    public void insertUser(InsertUserForm form){
+
+        if (!JSONUtil.isJsonArray(form.getRole())) {
+            throw new OfficeException("角色不是数组格式");
+        }
+
+        JSONArray array = JSONUtil.parseArray(form.getRole());
+        int id = deptService.searchDeptIdByDeptName(form.getDeptName());
+        TbUser user = new TbUser();
+        BeanUtils.copyProperties(form, user);
+        user.setDeptId(id);
+        user.setCreateTime(new Date());
+        if (array.contains(0)) {
+            user.setRoot(true);
+        } else {
+            user.setRoot(false);
+        }
+        int i = tbUserMapper.insertUser(user);
+        if (i == 1){
+            //生成激活码 发送邮件
+            activeCodeTask.sendActiveCodeAsync(user.getId(),user.getEmail());
+        }else{
+            throw new OfficeException("添加员工失败");
+        }
+    }
+
+    /**
+     * 查询用户信息
+     * @param userId
+     * @return
+     */
+    @Override
+    public HashMap searchUserSummary(int userId) {
+        HashMap map = tbUserMapper.searchUserSummary(userId);
+        return map;
+    }
+
+    /**
+     * 查询用户的个人资料
+     * @param userId
+     * @return
+     */
+    @Override
+    public HashMap searchUserInfo(int userId) {
+        HashMap map = tbUserMapper.searchUserInfo(userId);
+        return map;
+    }
+
+    /**
+     * 更新用户的个人信息
+     * @param form
+     * @return
+     */
+    @Override
+    public int updateUserInfo(UpdateUserInfoForm form) {
+        boolean root = false;
+        if (!JSONUtil.isJsonArray(form.getRole())) {
+            throw new OfficeException("role不是有效的JSON数组");
+        } else {
+            // 判断是否有超级管理员权限
+            JSONArray role = JSONUtil.parseArray(form.getRole());
+            root = role.contains(0) ? true : false;
+        }
+        int id = deptService.searchDeptIdByDeptName(form.getDeptName());
+        TbUser user = new TbUser();
+        BeanUtils.copyProperties(form, user);
+        user.setDeptId(id);
+        //更新员工记录
+        int rows = tbUserMapper.updateUserInfo(user);
+        return rows;
     }
 }

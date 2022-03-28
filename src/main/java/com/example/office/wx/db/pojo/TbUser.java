@@ -1,10 +1,13 @@
 package com.example.office.wx.db.pojo;
 
+import lombok.Data;
+
 import java.util.Date;
 
 /**
  * 用户表
  */
+@Data
 public class TbUser {
     /**
      * 主键
@@ -49,7 +52,7 @@ public class TbUser {
     /**
      * 入职日期
      */
-    private Date hiredate;
+    private String hiredate;
 
     /**
      * 角色
@@ -140,11 +143,11 @@ public class TbUser {
         this.email = email;
     }
 
-    public Date getHiredate() {
+    public String getHiredate() {
         return hiredate;
     }
 
-    public void setHiredate(Date hiredate) {
+    public void setHiredate(String hiredate) {
         this.hiredate = hiredate;
     }
 

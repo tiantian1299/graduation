@@ -1,15 +1,11 @@
-package com.example.office.wx.db.mapper;
+package com.example.office.wx.service;
+
 
 import com.example.office.wx.db.pojo.TbDept;
-import org.apache.ibatis.annotations.Mapper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-
-@Mapper
-public interface TbDeptMapper {
+public interface DeptService {
 
     /**
      * 查询所有部门
@@ -32,7 +28,7 @@ public interface TbDeptMapper {
      * @param id
      * @return
      */
-    int deleteDeptById(int id);
+    void deleteDeptById(int id);
 
     /**
      * 根据部门id更新部门
@@ -40,19 +36,7 @@ public interface TbDeptMapper {
      * @param entity
      * @return
      */
-    int updateDeptById(TbDept entity);
+    void updateDeptById(TbDept entity);
 
-    /**
-     * 查询该部门下的员工人数
-     * @param keyword
-     * @return
-     */
-    ArrayList<HashMap> searchDeptMembers(String keyword);
-
-    /**
-     * 根据部门名查询部门iid
-     * @param deptName
-     * @return
-     */
     int searchDeptIdByDeptName(String deptName);
 }
