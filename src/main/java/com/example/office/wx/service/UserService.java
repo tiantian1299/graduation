@@ -1,11 +1,13 @@
 package com.example.office.wx.service;
 
+import cn.hutool.json.JSONObject;
 import com.example.office.wx.controller.form.InsertUserForm;
 import com.example.office.wx.controller.form.UpdateUserInfoForm;
 import com.example.office.wx.db.pojo.TbUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public interface UserService {
@@ -85,8 +87,27 @@ public interface UserService {
 
     /**
      * 更新员工的基本信息
-     * @param tbUser
+     * @param form
      * @return
      */
     int updateUserInfo(UpdateUserInfoForm form);
+
+    /**
+     * 删除员工
+     * @param userId
+     */
+    void deleteUserById(int userId);
+
+    /**
+     * 查询员工通讯录
+     * @return
+     */
+    JSONObject searchUserContactList();
+
+    /**
+     * 查询参会用户信息
+     * @param params
+     * @return
+     */
+    ArrayList<HashMap> searchMembersInfo(List params);
 }

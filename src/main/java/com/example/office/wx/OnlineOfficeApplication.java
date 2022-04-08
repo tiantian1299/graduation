@@ -15,7 +15,11 @@ import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.List;
 
-@SpringBootApplication
+
+@SpringBootApplication(
+        exclude = {org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
+                org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration.class
+        })
 @ServletComponentScan
 //开启异步多线程
 @EnableAsync

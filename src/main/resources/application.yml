@@ -10,14 +10,14 @@ sercer:
     uri-encoding: UTF-8
 
 spring:
-  data:
-    mongodb:
-      authentication-database: admin
-      database: online_office
-      host: localhost
-      password: tian0603
-      port: 27017
-      username: tian
+#  data:
+#    mongodb:
+#      authentication-database: admin
+#      database: online_office
+#      host: localhost
+#      password: tian0603
+#      port: 27017
+#      username: tian
 
   datasource:
     druid:
@@ -52,12 +52,22 @@ spring:
     username: 17610405963@163.com
     password: CQXEZPYFUXXEDGGB
 
+  activiti:
+    database-schema-update: true
+    #检测历史表是否存在 activiti7默认没有开启数据库历史记录 启动数据库历史记录
+    db-history-used: true
+    #记录历史等级 可配置的历史级别有none, activity, audit, full
+    history-level: audit
+    #校验流程文件，默认校验resources下的processes文件夹里的流程文件
+    check-process-definitions: false
+
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.example.onlineoffice.wx.db.pojo #实体类所在的包
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启日志
     map-underscore-to-camel-case: true #支持驼峰命名法
+
 
   #日志输出
 logging:
@@ -66,8 +76,6 @@ logging:
     com.example.onlineoffice.wx.db.dao: warn #将dao接口的日志级别调高到警告级别
   pattern:
     console: "%d{HH:mm:ss}   %-5level  %msg%n"
-
-
 
 office:
   jwt:
@@ -82,9 +90,12 @@ wx:
   app-id: wx63a67d6eac5a6aa8
   app-secret: b5d8b49028a587384545b61d8d04a396
 
-
 email:
   default-encoding: UTF-8
   host: smtp.163.com
   username: 17610405963@163.com
   password: CQXEZPYFUXXEDGGB
+
+
+
+

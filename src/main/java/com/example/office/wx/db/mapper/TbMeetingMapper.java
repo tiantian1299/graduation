@@ -3,18 +3,40 @@ package com.example.office.wx.db.mapper;
 import com.example.office.wx.db.pojo.TbMeeting;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 @Mapper
 public interface TbMeetingMapper {
-    int deleteByPrimaryKey(Long id);
 
-    int insert(TbMeeting record);
+    /**
+     * 添加一条会议记录
+     * @param entity
+     * @return
+     */
+    int insertMeeting(TbMeeting entity);
 
-    int insertSelective(TbMeeting record);
+    /**
+     * 分页查询会议列表
+     * @param params
+     * @return
+     */
+    ArrayList<HashMap> searchMyMeetingListByPage(HashMap params);
 
-    TbMeeting selectByPrimaryKey(Long id);
+    /**
+     * 根据会议id查询会议详情
+     * @param id
+     * @return
+     */
+    HashMap searchMeetingById (int id);
 
-    int updateByPrimaryKeySelective(TbMeeting record);
+    /**
+     * 根据会议id会议成员信息
+     * @param id
+     * @return
+     */
+    ArrayList<HashMap> searchMeetingMembers (int id);
 
-    int updateByPrimaryKey(TbMeeting record);
+
 }

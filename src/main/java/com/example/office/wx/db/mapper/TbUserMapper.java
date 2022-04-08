@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 
@@ -103,4 +104,24 @@ public interface TbUserMapper {
      * @return
      */
     HashMap searchUserInfo(int userId);
+
+    /**
+     * 删除员工
+     * @param userId
+     * @return
+     */
+    int deleteUserById (int userId);
+
+    /**
+     * 查询员工通讯录
+     * @return
+     */
+    ArrayList<HashMap> searchUserContactList();
+
+    /**
+     * 查询参会成员信息
+     * @param param 参会人员 id
+     * @return
+     */
+    ArrayList<HashMap> searchMembersInfo(List param);
 }

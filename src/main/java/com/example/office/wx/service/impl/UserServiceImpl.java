@@ -1,5 +1,6 @@
 package com.example.office.wx.service.impl;
 
+import cn.hutool.extra.pinyin.PinyinUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -21,10 +22,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -276,8 +274,58 @@ public class UserServiceImpl implements UserService {
         TbUser user = new TbUser();
         BeanUtils.copyProperties(form, user);
         user.setDeptId(id);
+        user.setId(form.getUserId());
+        user.setStatus((byte) form.getStatus());
+        user.setRoot(root);
         //更新员工记录
         int rows = tbUserMapper.updateUserInfo(user);
         return rows;
+    }
+
+    /**
+     * 删除员工
+     * @param userId
+     */
+    @Override
+    public void deleteUserById(int userId){
+        int i = tbUserMapper.deleteUserById(userId);
+        if(i!=1){
+            throw new OfficeException("删除员工失败");
+        }
+    }
+
+    /**
+     * 查询用户通讯录
+     * @return
+     */
+    @Override
+    public JSONObject searchUserContactList() {
+        ArrayList<HashMap> list = tbUserMapper.searchUserContactList();
+        String letter = null;
+        JSONObject json = new JSONObject(true);
+        JSONArray array = null;
+        for (HashMap<String, String> map : list) {
+            String name = map.get("name");
+            //拿到第一个字母
+            String firstLetter = PinyinUtil.getPinyin(name).charAt(0) + "";
+            firstLetter = firstLetter.toUpperCase();
+            if (letter == null || !letter.equals(firstLetter)) {
+                letter = firstLetter;
+                array = new JSONArray();
+                json.set(letter, array);
+            }
+            array.put(map);
+        }
+        return json;
+    }
+
+    /**
+     * 查询参会用户信息
+     * @param params
+     * @return
+     */
+    @Override
+    public ArrayList<HashMap> searchMembersInfo(List params){
+        return tbUserMapper.searchMembersInfo(params);
     }
 }

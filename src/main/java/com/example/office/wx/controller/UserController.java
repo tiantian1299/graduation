@@ -1,8 +1,11 @@
 package com.example.office.wx.controller;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.example.office.wx.common.util.R;
 import com.example.office.wx.config.shiro.JwtUtil;
 import com.example.office.wx.controller.form.*;
+import com.example.office.wx.exception.OfficeException;
 import com.example.office.wx.service.DeptService;
 import com.example.office.wx.service.UserService;
 import io.swagger.annotations.Api;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -121,4 +125,32 @@ public class UserController {
         int rows = userService.updateUserInfo(form);
         return R.ok().put("result", rows);
     }
+
+    @PostMapping("/deleteUserById")
+    @ApiOperation("删除员工记录")
+    @RequiresPermissions(value = {"ROOT", "EMPLOYEE:DELETE"}, logical = Logical.OR)
+    public R deleteUserById(@Valid @RequestBody DeleteUserByIdForm form) {
+        userService.deleteUserById(form.getId());
+        return R.ok().put("result", "success");
+    }
+
+    @GetMapping("/searchUserContactList")
+    @ApiOperation("查询通讯录列表")
+    public R searchUserContactList() {
+        JSONObject json = userService.searchUserContactList();
+        return R.ok().put("result", json);
+    }
+
+    @PostMapping("/searchMembers")
+    @ApiOperation("查询成员")
+    @RequiresPermissions(value = {"ROOT", "MEETING:INSERT", "MEETING:UPDATE"}, logical = Logical.OR)
+    public R searchMembers(@Valid @RequestBody SearchMembersForm form) {
+        if (!JSONUtil.isJsonArray(form.getMembers())) {
+            throw new OfficeException("members不是JSON数组");
+        }
+        List param = JSONUtil.parseArray(form.getMembers()).toList(Integer.class);
+        ArrayList list = userService.searchMembersInfo(param);
+        return R.ok().put("result", list);
+    }
+
 }
