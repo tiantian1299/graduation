@@ -38,5 +38,24 @@ public interface TbMeetingMapper {
      */
     ArrayList<HashMap> searchMeetingMembers (int id);
 
+    /**
+     * 更新会议信息
+     * @param entity
+     * @return
+     */
+    int updateMeetingInfo(TbMeeting entity);
 
+    /**
+     * 删除会议
+     * @param id
+     * @return
+     */
+    int deleteMeetingById(int id);
+
+    /**
+     * 根据会议流程id查询会议信息
+     * @param params
+     * @return
+     */
+   HashMap searchMeetbyInstanceId (HashMap params);
 }

@@ -42,7 +42,7 @@ public class OAuth2Realm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        TbUser user  = (TbUser)principalCollection.getPrimaryPrincipal();
+        TbUser user = (TbUser) principalCollection.getPrimaryPrincipal();
         int userId = user.getId();
         //查询用户的权限列表
         Set<String> permissions = userService.searchUserPermissions(userId);

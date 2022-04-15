@@ -1,58 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.office.wx.db.mapper.TbMeetingMapper">
-  <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.TbMeeting">
-    <!--@mbg.generated-->
-    <!--@Table tb_meeting-->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
-    <result column="date" jdbcType="DATE" property="date" />
-    <result column="place" jdbcType="VARCHAR" property="place" />
-    <result column="start" jdbcType="TIME" property="start" />
-    <result column="end" jdbcType="TIME" property="end" />
-    <result column="type" jdbcType="SMALLINT" property="type" />
-    <result column="members" jdbcType="VARCHAR" property="members" />
-    <result column="desc" jdbcType="VARCHAR" property="desc" />
-    <result column="instance_id" jdbcType="VARCHAR" property="instanceId" />
-    <result column="status" jdbcType="SMALLINT" property="status" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, uuid, title, creator_id, `date`, place, `start`, `end`, `type`, members, `desc`, 
-    instance_id, `status`, create_time
-  </sql>
-  <insert id="insertMeeting" parameterType="com.example.office.wx.db.pojo.TbMeeting">
-    INSERT INTO tb_meeting
-    SET uuid = #{uuid},
-    title = #{title},
-    date = #{date},
-    creator_id = #{creatorId},
-    <if test="place!=null">
-      place = #{place},
-    </if>
-    start = #{start},
-    end = #{end},
-    type = #{type},
-    members = #{members},
-    `desc` = #{desc},
-    instance_id = #{instanceId},
-    status = #{status},
-    create_time = NOW()
-  </insert>
+    <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.TbMeeting">
+        <!--@mbg.generated-->
+        <!--@Table tb_meeting-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="creator_id" jdbcType="BIGINT" property="creatorId"/>
+        <result column="date" jdbcType="DATE" property="date"/>
+        <result column="place" jdbcType="VARCHAR" property="place"/>
+        <result column="start" jdbcType="TIME" property="start"/>
+        <result column="end" jdbcType="TIME" property="end"/>
+        <result column="type" jdbcType="SMALLINT" property="type"/>
+        <result column="members" jdbcType="VARCHAR" property="members"/>
+        <result column="desc" jdbcType="VARCHAR" property="desc"/>
+        <result column="instance_id" jdbcType="VARCHAR" property="instanceId"/>
+        <result column="status" jdbcType="SMALLINT" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, uuid, title, creator_id, `date`, place, `start`, `end`, `type`, members, `desc`,
+        instance_id, `status`, create_time
+    </sql>
+    <insert id="insertMeeting" parameterType="com.example.office.wx.db.pojo.TbMeeting">
+        INSERT INTO tb_meeting
+        SET uuid = #{uuid},
+        title = #{title},
+        date = #{date},
+        creator_id = #{creatorId},
+        <if test="place!=null">
+            place = #{place},
+        </if>
+        start = #{start},
+        end = #{end},
+        type = #{type},
+        members = #{members},
+        `desc` = #{desc},
+        instance_id = #{instanceId},
+        status = #{status},
+        create_time = NOW()
+    </insert>
 
-  <select id="searchMyMeetingListByPage" parameterType="HashMap" resultType="HashMap">
-    SELECT
-      m.id,
-      m.uuid,
-      m.title,
-      u2.name,
-      DATE_FORMAT(m.date,'%Y年%m月%d日') AS date,
+    <select id="searchMyMeetingListByPage" parameterType="HashMap" resultType="HashMap">
+        SELECT m.id,
+               m.uuid,
+               m.title,
+               u2.name,
+               DATE_FORMAT(m.date, '%Y年%m月%d日') AS date,
 	    m.place,
-	    DATE_FORMAT(m.start,'%H:%i') AS start,
-      DATE_FORMAT(m.end,'%H:%i') AS end,
+	    DATE_FORMAT(m.start,'%H:%i') AS
+        start
+            , DATE_FORMAT(m.end
+            , '%H:%i') AS
+        end
+        ,
 	    m.type,
 	    m.status,
 	    m.desc,
@@ -61,37 +64,121 @@
     FROM tb_meeting m
 	JOIN tb_user u1 ON JSON_CONTAINS ( m.members, CAST( u1.id AS CHAR ) )
 	JOIN tb_user u2 ON m.creator_id = u2.id
-    WHERE u1.id = #{userId} AND m.status IN(3,4)
-    AND u1.status = 1 AND u2.status = 1
-    ORDER BY m.date, m.start, m.id
-    LIMIT #{start},#{length}
-  </select>
-  <select id="searchMeetingById" parameterType="int" resultType="HashMap">
-    SELECT
-      m.uuid,
-      m.creator_id AS creatorId,
-      m.title,
-      u.name,
-      DATE_FORMAT( m.date, '%Y-%m-%d' ) AS date,
+    WHERE u1.id =
+        #{userId}
+        AND
+        m
+        .
+        status
+        IN
+        (
+        3,
+        4
+        )
+        AND
+        u1
+        .
+        status
+        =
+        1
+        AND
+        u2
+        .
+        status
+        =
+        1
+        ORDER
+        BY
+        m
+        .
+        date,
+        m
+        .
+        start,
+        m
+        .
+        id
+        LIMIT
+        #{start},
+        #{length}
+    </select>
+    <select id="searchMeetingById" parameterType="int" resultType="HashMap">
+        SELECT m.uuid,
+               m.creator_id AS creatorId,
+               m.title,
+               u.name,
+               DATE_FORMAT(m.date, '%Y-%m-%d') AS date,
 		m.place,
-		DATE_FORMAT( m.START, '%H:%i' ) AS start,
-      DATE_FORMAT( m.END, '%H:%i' ) AS end,
+		DATE_FORMAT( m.START, '%H:%i' ) AS
+        start
+            , DATE_FORMAT( m.END
+            , '%H:%i' ) AS
+        end
+        ,
 		m.type,
 		m.status,
 		m.desc,
 		m.instance_id AS instanceId
 	FROM tb_meeting m
 	JOIN tb_user u ON m.creator_id = u.id
-	WHERE m.id =#{id} AND u.status = 1
-  </select>
+	WHERE m.id =
+        #{id}
+        AND
+        u
+        .
+        status
+        =
+        1
+    </select>
 
     <select id="searchMeetingMembers" parameterType="int" resultType="HashMap">
-        SELECT
-            u.id,
-            u.name,
-            u.photo
+        SELECT u.id,
+               u.name,
+               u.photo
         FROM tb_meeting m
-                 JOIN tb_user u ON JSON_CONTAINS ( m.members, CAST( u.id AS CHAR ) )
-        WHERE m.id=#{id} AND u.status = 1
+                 JOIN tb_user u ON JSON_CONTAINS(m.members, CAST(u.id AS CHAR))
+        WHERE m.id = #{id}
+          AND u.status = 1
+    </select>
+
+    <update id="updateMeetingInfo" parameterType="com.example.office.wx.db.pojo.TbMeeting">
+        UPDATE tb_meeting
+        SET
+        title = #{title},
+        date = #{date},
+        <if test="place!=null">
+            place = #{place},
+        </if>
+        start = #{start},
+        end = #{end},
+        type = #{type},
+        members = #{members},
+        `desc` = #{desc},
+        instance_id = #{instanceId},
+        status = #{status}
+        where id = #{id}
+    </update>
+    <delete id="deleteMeetingById" parameterType="int">
+        DELETE
+        FROM tb_meeting
+        WHERE id = #{id}
+          AND status = 3
+    </delete>
+    <select id="searchMeetbyInstanceId" parameterType="map" resultType="java.util.HashMap">
+        select meet.id,
+               u1.photo as creatorPhoto,
+               u2.photo as approvalPhoto,
+               (case meet.type
+                    when 1 then '在线会议'
+                    when 3 then '线下会议'
+                   end) as type,
+               TIMESTAMPDIFF(MINUTE,meet.`start`, meet.`end`) as minute,
+                meet.date,
+                meet.`status`,
+        u1.`name` as creator,u2.name as approval
+        from tb_meeting meet
+        left join tb_user u1 on u1.id = meet.creator_id
+        left join tb_user u2 on u2.id = #{id}
+        where meet.instance_id = #{instanceId}
     </select>
 </mapper>

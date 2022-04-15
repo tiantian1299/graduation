@@ -8,6 +8,7 @@ public interface RoleService {
 
     /**
      * 添加角色
+     *
      * @param tbRole
      * @return
      */
@@ -15,6 +16,7 @@ public interface RoleService {
 
     /**
      * 更新角色的权限
+     *
      * @param tbRole
      * @return
      */
@@ -22,13 +24,15 @@ public interface RoleService {
 
     /**
      * 查询所有角色
+     *
      * @return
      */
-    public List<TbRole> searchAllRole();
+    List<TbRole> searchAllRole();
 
     /**
      * 根据角色id删除角色信息
+     *
      * @param id
      */
-    public void deleteRoleById(int id);
+    void deleteRoleById(int id);
 }

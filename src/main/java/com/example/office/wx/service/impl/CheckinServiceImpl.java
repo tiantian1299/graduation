@@ -47,26 +47,6 @@ public class CheckinServiceImpl implements CheckinService {
     @Autowired
     private TbCheckinMapper tbCheckinMapper;
 
-    public static void main(String[] args) {
-        DateTime startDate = DateUtil.parseDate("2022-03-7");
-        DateTime endDate = DateUtil.parseDate("2022-03-13");
-        DateRange range = DateUtil.range(startDate, endDate, DateField.DAY_OF_MONTH);
-        for (DateTime date : range) {
-            System.out.println(date);
-            System.out.println(date.dayOfWeekEnum().toChinese("周"));
-        }
-        DateTime dateTime = DateUtil.parseDate("2022-02-3");
-        // yyyy-mm-dd hh:mm:ss
-        System.out.println(dateTime);
-        // yyyy-mm-dd hh:mm:ss
-        System.out.println(DateUtil.date());
-        //yyyy-mm-dd
-        System.out.println("今天：" + DateUtil.today());
-
-        DateTime endTime = DateUtil.parse(DateUtil.today() + " 22:33:33");
-        System.out.println(DateUtil.compare(DateUtil.date(), endTime));
-    }
-
     /**
      * 验证是否可以签到
      *
@@ -279,11 +259,12 @@ public class CheckinServiceImpl implements CheckinService {
 
     /**
      * 查询用户一个月的签到情况
+     *
      * @param params
      * @return
      */
     @Override
-    public ArrayList<HashMap> queryMonthCheckin(HashMap params){
+    public ArrayList<HashMap> queryMonthCheckin(HashMap params) {
         return queryWeekCheckin(params);
     }
 

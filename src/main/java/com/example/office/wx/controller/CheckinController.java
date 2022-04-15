@@ -38,14 +38,6 @@ public class CheckinController {
     @Autowired
     private SystemConstants constants;
 
-    public static void main(String[] args) {
-        DateTime startTime = DateUtil.beginOfWeek(DateUtil.date());
-        DateTime endTime = DateUtil.endOfWeek(DateUtil.date());
-        System.out.println(startTime + startTime.dayOfWeekEnum().toChinese());
-        System.out.println(endTime + endTime.dayOfWeekEnum().toChinese());
-        System.out.println(DateUtil.date().toString());
-    }
-
     /**
      * 判断用户是否可以签到
      *
@@ -127,27 +119,27 @@ public class CheckinController {
 
         HashMap param = new HashMap();
         param.put("startTime", startTime.toString());
-        param.put("endTime",endTime.toString());
+        param.put("endTime", endTime.toString());
         param.put("userId", userId);
 
         ArrayList<HashMap> list = checkinService.queryMonthCheckin(param);
         //统计月考勤数据  正常，迟到，缺勤
         int normal = 0, late = 0, lock = 0;
-        for(HashMap<String,String> map : list){
+        for (HashMap<String, String> map : list) {
             String type = map.get("type");
             String status = map.get("status");
-            if ("工作日".equals(type) && status!=""){
+            if ("工作日".equals(type) && status != "") {
                 //计算考勤状态
-                if ("正常".equals(status)){
+                if ("正常".equals(status)) {
                     normal++;
-                }else if ("迟到".equals(status)){
+                } else if ("迟到".equals(status)) {
                     late++;
-                }else if ("缺勤".equals(status)){
+                } else if ("缺勤".equals(status)) {
                     lock++;
                 }
             }
         }
-        return R.ok().put("list", list).put("normal",normal).put("late",late).put("lock",lock);
+        return R.ok().put("list", list).put("normal", normal).put("late", late).put("lock", lock);
     }
 }
 

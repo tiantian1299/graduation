@@ -124,4 +124,18 @@ public interface TbUserMapper {
      * @return
      */
     ArrayList<HashMap> searchMembersInfo(List param);
+
+    /**
+     * 查询用户角色
+     * @param id
+     * @return
+     */
+    ArrayList<String> seacherUserRole(int id);
+
+    /**
+     * 查询员工的部门经理
+     * @param id
+     * @return
+     */
+    int searchDeptManger(int id);
 }

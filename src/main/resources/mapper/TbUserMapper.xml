@@ -225,4 +225,16 @@
             #{id}
         </foreach>
     </select>
+    <select id="seacherUserRole" parameterType="int" resultType="string">
+        select tb_role.role_name
+        from tb_user
+                 left join tb_role on JSON_CONTAINS(tb_user.role, (CAST(tb_role.id AS CHAR)))
+        where tb_user.id =  #{id}
+    </select>
+    <select id="searchDeptManger" parameterType="int" resultType="int">
+        select u2.id
+        from tb_user u1
+                 left join tb_user u2 on u1.dept_id = u2.dept_id
+        where JSON_CONTAINS(u2.role,'1') and u1.id = #{id}
+    </select>
 </mapper>

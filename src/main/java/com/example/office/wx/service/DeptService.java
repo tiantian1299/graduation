@@ -38,5 +38,10 @@ public interface DeptService {
      */
     void updateDeptById(TbDept entity);
 
+    /**
+     * 根据部门名查询部门iid
+     * @param deptName
+     * @return
+     */
     int searchDeptIdByDeptName(String deptName);
 }

@@ -10,14 +10,14 @@ sercer:
     uri-encoding: UTF-8
 
 spring:
-#  data:
-#    mongodb:
-#      authentication-database: admin
-#      database: online_office
-#      host: localhost
-#      password: tian0603
-#      port: 27017
-#      username: tian
+  #  data:
+  #    mongodb:
+  #      authentication-database: admin
+  #      database: online_office
+  #      host: localhost
+  #      password: tian0603
+  #      port: 27017
+  #      username: tian
 
   datasource:
     druid:
@@ -59,7 +59,7 @@ spring:
     #记录历史等级 可配置的历史级别有none, activity, audit, full
     history-level: audit
     #校验流程文件，默认校验resources下的processes文件夹里的流程文件
-    check-process-definitions: false
+    check-process-definitions: true
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml

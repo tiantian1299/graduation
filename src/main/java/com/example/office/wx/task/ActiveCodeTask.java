@@ -22,6 +22,7 @@ public class ActiveCodeTask {
 
     /**
      * 异步发送激活码给员工
+     *
      * @param userId
      * @param email
      */

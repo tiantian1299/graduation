@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DeptServiceImpl implements DeptService{
+public class DeptServiceImpl implements DeptService {
 
     @Autowired
     private TbDeptMapper tbDeptMapper;
@@ -21,6 +21,7 @@ public class DeptServiceImpl implements DeptService{
 
     /**
      * 查询所有部门
+     *
      * @return
      */
     @Override
@@ -31,6 +32,7 @@ public class DeptServiceImpl implements DeptService{
 
     /**
      * 插入部门信息
+     *
      * @param deptName
      * @return
      */
@@ -45,6 +47,7 @@ public class DeptServiceImpl implements DeptService{
 
     /**
      * 根据id删除部门
+     *
      * @param id
      */
     @Override
@@ -62,8 +65,8 @@ public class DeptServiceImpl implements DeptService{
     }
 
     @Override
-    public void updateDeptById(TbDept entity){
-        int row=tbDeptMapper.updateDeptById(entity);
+    public void updateDeptById(TbDept entity) {
+        int row = tbDeptMapper.updateDeptById(entity);
         if (row != 1) {
             throw new OfficeException("部门删除失败");
         }
@@ -71,11 +74,12 @@ public class DeptServiceImpl implements DeptService{
 
     /**
      * 根据部门名称查询部门id
+     *
      * @param deptName
      * @return
      */
     @Override
-    public int searchDeptIdByDeptName(String deptName){
-       return tbDeptMapper.searchDeptIdByDeptName(deptName);
+    public int searchDeptIdByDeptName(String deptName) {
+        return tbDeptMapper.searchDeptIdByDeptName(deptName);
     }
 }

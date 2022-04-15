@@ -38,15 +38,15 @@ public class OnlineOfficeApplication {
     }
 
     @PostConstruct
-    public void init(){
+    public void init() {
         List<SysConfig> sysConfigs = sysConfigMapper.selectAllParam();
-        for (SysConfig config : sysConfigs){
+        for (SysConfig config : sysConfigs) {
             String key = config.getParamKey();
             key = StrUtil.toCamelCase(key);
-            String value =config.getParamValue();
+            String value = config.getParamValue();
             try {
                 Field field = constants.getClass().getDeclaredField(key);
-                field.set(constants,value);
+                field.set(constants, value);
             } catch (Exception e) {
                 log.error("处理异常");
             }

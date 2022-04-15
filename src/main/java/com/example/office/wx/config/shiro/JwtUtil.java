@@ -52,7 +52,7 @@ public class JwtUtil {
             DecodedJWT jwt = JWT.decode(token);
             int usrId = jwt.getClaim("userId").asInt();
             return usrId;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new OfficeException("令牌无效");
         }
     }

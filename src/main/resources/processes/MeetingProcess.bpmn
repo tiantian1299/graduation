@@ -6,11 +6,11 @@
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="exclusivegateway1"></sequenceFlow>
     <userTask id="usertask3" name="部门经理审批" activiti:assignee="${deptManager}" activiti:candidateGroups="deptApproval"></userTask>
     <sequenceFlow id="flow2" name="其他" sourceRef="exclusivegateway1" targetRef="usertask3">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outCome=true}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression">${identity!='领导'}</conditionExpression>
     </sequenceFlow>
-    <serviceTask id="servicetask1" name="发送通知"></serviceTask>
+    <serviceTask id="servicetask1" name="发送通知" activiti:class="com.example.office.wx.task.sendMessageTask"></serviceTask>
     <sequenceFlow id="flow4" name="总经理发起" sourceRef="exclusivegateway1" targetRef="servicetask1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outCome=false}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression">${identity=='领导'}</conditionExpression>
     </sequenceFlow>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow5" sourceRef="servicetask1" targetRef="endevent1"></sequenceFlow>

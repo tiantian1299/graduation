@@ -28,26 +28,20 @@ import java.util.*;
 @Slf4j
 @Scope("prototype")
 public class UserServiceImpl implements UserService {
-    @Value("${wx.app-id}")
-    private String appId;
-
-    @Value("${wx.app-secret}")
-    private String appSecret;
-
-    @Autowired
-    private TbUserMapper tbUserMapper;
-
-    @Autowired
-    private TbDeptMapper tbDeptMapper;
-
-    @Autowired
-    private ActiveCodeTask activeCodeTask;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
-
     @Autowired
     DeptService deptService;
+    @Value("${wx.app-id}")
+    private String appId;
+    @Value("${wx.app-secret}")
+    private String appSecret;
+    @Autowired
+    private TbUserMapper tbUserMapper;
+    @Autowired
+    private TbDeptMapper tbDeptMapper;
+    @Autowired
+    private ActiveCodeTask activeCodeTask;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 注册新用户
@@ -69,7 +63,7 @@ public class UserServiceImpl implements UserService {
                 HashMap params = new HashMap();
                 params.put("openId", openId);
                 params.put("nickname", "天天小可爱");
-                params.put("photo",photo);
+                params.put("photo", photo);
                 //角色多个，json格式
                 params.put("role", "[0]");
                 params.put("status", 1);
@@ -81,10 +75,10 @@ public class UserServiceImpl implements UserService {
             } else {
                 throw new OfficeException("已经存在超级管理员了");
             }
-        } else if (!redisTemplate.hasKey(registerCode)){
+        } else if (!redisTemplate.hasKey(registerCode)) {
             //判断验证码是否有效
             throw new OfficeException("无效的验证码");
-        }else{
+        } else {
             // 根据key值获取value值
             int userId = Integer.parseInt(redisTemplate.opsForValue().get(registerCode).toString());
             String openId = getOpenId(code);
@@ -158,17 +152,19 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 根据用户id 来查询用户信息
+     *
      * @param userId
      * @return
      */
     @Override
-    public TbUser searchById(int userId){
+    public TbUser searchById(int userId) {
         TbUser user = tbUserMapper.searchById(userId);
         return user;
     }
 
     /**
      * 查询用户的入职日期
+     *
      * @param userId
      * @return
      */
@@ -179,6 +175,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 按照部门分组查询用户信息
+     *
      * @param keyword
      * @return
      */
@@ -204,10 +201,11 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 新增员工
+     *
      * @param form
      */
     @Override
-    public void insertUser(InsertUserForm form){
+    public void insertUser(InsertUserForm form) {
 
         if (!JSONUtil.isJsonArray(form.getRole())) {
             throw new OfficeException("角色不是数组格式");
@@ -225,16 +223,17 @@ public class UserServiceImpl implements UserService {
             user.setRoot(false);
         }
         int i = tbUserMapper.insertUser(user);
-        if (i == 1){
+        if (i == 1) {
             //生成激活码 发送邮件
-            activeCodeTask.sendActiveCodeAsync(user.getId(),user.getEmail());
-        }else{
+            activeCodeTask.sendActiveCodeAsync(user.getId(), user.getEmail());
+        } else {
             throw new OfficeException("添加员工失败");
         }
     }
 
     /**
      * 查询用户信息
+     *
      * @param userId
      * @return
      */
@@ -246,6 +245,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 查询用户的个人资料
+     *
      * @param userId
      * @return
      */
@@ -257,6 +257,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 更新用户的个人信息
+     *
      * @param form
      * @return
      */
@@ -284,18 +285,20 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 删除员工
+     *
      * @param userId
      */
     @Override
-    public void deleteUserById(int userId){
+    public void deleteUserById(int userId) {
         int i = tbUserMapper.deleteUserById(userId);
-        if(i!=1){
+        if (i != 1) {
             throw new OfficeException("删除员工失败");
         }
     }
 
     /**
      * 查询用户通讯录
+     *
      * @return
      */
     @Override
@@ -321,11 +324,12 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 查询参会用户信息
+     *
      * @param params
      * @return
      */
     @Override
-    public ArrayList<HashMap> searchMembersInfo(List params){
+    public ArrayList<HashMap> searchMembersInfo(List params) {
         return tbUserMapper.searchMembersInfo(params);
     }
 }

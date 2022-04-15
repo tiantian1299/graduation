@@ -14,6 +14,12 @@ public interface MeetingService {
     void insertMeeting(TbMeeting entity);
 
     /**
+     * 更新会议信息
+     * @param entity
+     */
+    void updateMeetingInfo(TbMeeting entity);
+
+    /**
      * 分页查询会议列表
      * @param param
      * @return
@@ -26,4 +32,8 @@ public interface MeetingService {
      * @return
      */
     HashMap searchMeetingById(int id);
+
+    void deleteMeetingById(int id);
+
+    HashMap searchMeetbyInstanceId(String instanceId, String id);
 }

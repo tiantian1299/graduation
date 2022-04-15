@@ -72,6 +72,7 @@ public interface UserService {
 
     /**
      * 查询用户信息
+     *
      * @param userId
      * @return
      */
@@ -80,6 +81,7 @@ public interface UserService {
 
     /**
      * 查询用户的基本信息
+     *
      * @param userId
      * @return
      */
@@ -87,6 +89,7 @@ public interface UserService {
 
     /**
      * 更新员工的基本信息
+     *
      * @param form
      * @return
      */
@@ -94,18 +97,21 @@ public interface UserService {
 
     /**
      * 删除员工
+     *
      * @param userId
      */
     void deleteUserById(int userId);
 
     /**
      * 查询员工通讯录
+     *
      * @return
      */
     JSONObject searchUserContactList();
 
     /**
      * 查询参会用户信息
+     *
      * @param params
      * @return
      */
