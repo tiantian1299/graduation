@@ -26,11 +26,11 @@ spring:
       max-active: 16
       max-wait: 60000
       min-idle: 8
-      password: tian0603
+      password: byxf#2021
       test-on-borrow: false
       test-on-return: false
       test-while-idle: true
-      url: jdbc:mysql://localhost:3306/online_office?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://172.16.2.231:3307/tian?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       username: root
     type: com.alibaba.druid.pool.DruidDataSource
 

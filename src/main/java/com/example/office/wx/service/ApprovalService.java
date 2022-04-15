@@ -11,4 +11,11 @@ public interface ApprovalService {
      * @return
      */
     HashMap getApprovalList(String operator);
+
+    /**
+     * 完成审批工作
+     *
+     * @param processInstanceId
+     */
+    void completeTask(String processInstanceId, String result);
 }

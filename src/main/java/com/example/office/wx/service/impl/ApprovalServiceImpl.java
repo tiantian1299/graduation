@@ -49,6 +49,7 @@ public class ApprovalServiceImpl implements ApprovalService {
      *
      * @param processInstanceId
      */
+    @Override
     public void completeTask(String processInstanceId, String result) {
         Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
         HashMap map = new HashMap();

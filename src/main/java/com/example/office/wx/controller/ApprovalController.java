@@ -31,11 +31,8 @@ public class ApprovalController {
 
     @PostMapping("/completeTask")
     @ApiOperation("查询审批列表")
-    public R completeTask(@RequestParam String processInstanceId) {
-        approvalService.getApprovalList(processInstanceId);
+    public R completeTask(@RequestParam String processInstanceId,String result) {
+        approvalService.completeTask(processInstanceId,result);
         return R.ok().put("result", "success");
     }
-
-
-
 }

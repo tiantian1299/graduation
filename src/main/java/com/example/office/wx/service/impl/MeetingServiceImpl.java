@@ -8,9 +8,7 @@ import com.example.office.wx.exception.OfficeException;
 import com.example.office.wx.service.MeetingService;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +27,6 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     private TbUserMapper tbUserMapper;
-
-    @Autowired
-    private HistoryService historyService;
-
-    @Autowired
-    private TaskService taskService;
 
     @Override
     public void insertMeeting(TbMeeting entity) {
