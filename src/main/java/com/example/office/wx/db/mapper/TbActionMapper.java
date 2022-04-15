@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface TbActionMapper {
+   
     int deleteByPrimaryKey(Integer id);
 
     int insert(TbAction record);
@@ -15,6 +16,8 @@ public interface TbActionMapper {
     TbAction selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(TbAction record);
-
+    
+    //测试
     int updateByPrimaryKey(TbAction record);
+    
 }
