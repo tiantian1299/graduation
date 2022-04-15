@@ -46,6 +46,7 @@ public class MeetingServiceImpl implements MeetingService {
         if (identity.equals("其他")) {
             //查询该部门的部门经理id
             int deptManager = tbUserMapper.searchDeptManger(Math.toIntExact(entity.getCreatorId()));
+
             map.put("deptManager", deptManager);
         } else {
             map.put("result", "同意");
