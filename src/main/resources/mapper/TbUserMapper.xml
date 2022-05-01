@@ -240,4 +240,8 @@
     <select id="searchUserByRole" parameterType="int" resultType="int">
         select u1.id from tb_user u1 where JSON_CONTAINS(u1.role, (CAST(#{roleId} AS CHAR)))
     </select>
+    <select id="searchMemberEmail" parameterType="int" resultType="String">
+        SELECT email FROM tb_user WHERE id=#{id} AND status = 1
+    </select>
+
 </mapper>

@@ -10,6 +10,7 @@ import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.RuntimeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     private TbUserMapper tbUserMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public void insertMeeting(TbMeeting entity) {
@@ -201,5 +205,20 @@ public class MeetingServiceImpl implements MeetingService {
     public List<String> searchUserMeetingInMonth(HashMap param) {
         List list=tbMeetingMapper.searchUserMeetingInMonth(param);
         return list;
+    }
+
+    /**
+     * 根据会议id 查询会议室房间号
+     * @param id
+     * @return
+     */
+    @Override
+    public int searchRoomIdById(int id) {
+        Object temp = redisTemplate.opsForValue().get(id+"");
+        if (temp == null){
+            throw new OfficeException("房间号不存在");
+        }
+        int roomId = Integer.parseInt(temp.toString());
+        return roomId;
     }
 }

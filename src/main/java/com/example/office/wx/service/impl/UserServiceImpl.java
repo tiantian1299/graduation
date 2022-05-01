@@ -332,4 +332,10 @@ public class UserServiceImpl implements UserService {
     public ArrayList<HashMap> searchMembersInfo(List params) {
         return tbUserMapper.searchMembersInfo(params);
     }
+
+    @Override
+    public String searchMemberEmail(int id) {
+        String email = tbUserMapper.searchMemberEmail(id);
+        return email;
+    }
 }

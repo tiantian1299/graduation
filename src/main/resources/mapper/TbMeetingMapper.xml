@@ -75,7 +75,8 @@
         IN
         (
         3,
-        4
+        4,
+        5
         )
         AND
         u1
@@ -218,7 +219,7 @@
             meet.members,
             (
             CAST( u2.id AS CHAR )))
-        where meet.status = 3 and meet.isSend = 0
+        where meet.status in(2,3) and meet.isSend = 0
         group by (meet.id)
     </select>
 
@@ -251,7 +252,16 @@
           AND m.status IN(3,4)
           AND DATE_FORMAT(m.date,'%Y-%c')=#{express}
     </select>
+    <select id="searchOpening" resultMap="BaseResultMap">
+        select * from tb_meeting
+        where date = CURRENT_DATE
+          and CURRENT_TIME BETWEEN `START`and `END` and status = 3
+    </select>
 
-
+    <select id="searchClose" resultMap="BaseResultMap">
+        SELECT * FROM `tb_meeting`
+        where date = CURRENT_DATE
+          and CURRENT_TIME > `END` and status = 4
+    </select>
 
 </mapper>

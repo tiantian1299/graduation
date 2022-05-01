@@ -145,4 +145,11 @@ public interface TbUserMapper {
      * @return
      */
     List<Integer> searchUserByRole(int roleId);
+
+    /**
+     * 根据用户id查询用户邮箱
+     * @param id
+     * @return
+     */
+    String searchMemberEmail(int id);
 }

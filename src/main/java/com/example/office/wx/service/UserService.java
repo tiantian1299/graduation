@@ -116,4 +116,7 @@ public interface UserService {
      * @return
      */
     ArrayList<HashMap> searchMembersInfo(List params);
+
+
+    String searchMemberEmail(int id);
 }

@@ -45,6 +45,13 @@ public interface MeetingService {
      */
     List<String> searchUserMeetingInMonth(HashMap param);
 
+    /**
+     * 根据会议id 查询会议室房间号
+     * @param id
+     * @return
+     */
+    int searchRoomIdById(int id);
+
 
 
 }

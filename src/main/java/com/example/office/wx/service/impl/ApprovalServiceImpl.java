@@ -267,7 +267,7 @@ public class ApprovalServiceImpl implements ApprovalService {
                 meet.put("status", "审批中");
                 meet.put("processStatus", "未结束");
             }
-            if (status.equals(2)) {
+            else if (status.equals(2)) {
                 meet.put("result", "不同意");
                 meet.put("processStatus", "已结束");
             } else {

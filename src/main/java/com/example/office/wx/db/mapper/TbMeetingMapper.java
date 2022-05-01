@@ -93,4 +93,16 @@ public interface TbMeetingMapper {
      * @return
      */
     List<String> searchUserMeetingInMonth(HashMap param);
+
+    /**
+     * 查询正在进行的会议
+     * @return
+     */
+    List<TbMeeting> searchOpening();
+
+    /**
+     * 查询结束的会议
+     * @return
+     */
+    List<TbMeeting> searchClose();
 }

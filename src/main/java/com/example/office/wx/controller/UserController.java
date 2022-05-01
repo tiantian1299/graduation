@@ -4,6 +4,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.example.office.wx.common.util.R;
 import com.example.office.wx.config.shiro.JwtUtil;
+import com.example.office.wx.config.tencent.TLSSigAPIv2;
 import com.example.office.wx.controller.form.*;
 import com.example.office.wx.exception.OfficeException;
 import com.example.office.wx.service.DeptService;
@@ -12,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,6 +41,15 @@ public class UserController {
     private JwtUtil jwtUtil;
     @Value("${office.jwt.cache-expire}")
     private int cacheExpire;
+
+    @Value("${trtc.appId}")
+    private Integer appId;
+
+    @Value("${trtc.secretKey}")
+    private String key;
+
+    @Value("${trtc.expire}")
+    private Integer expire;
 
     @PostMapping("/register")
     @ApiOperation("注册用户")
@@ -149,6 +160,15 @@ public class UserController {
         List param = JSONUtil.parseArray(form.getMembers()).toList(Integer.class);
         ArrayList list = userService.searchMembersInfo(param);
         return R.ok().put("result", list);
+    }
+
+    @GetMapping("/genUserSig")
+    @ApiOperation("生成用户签名")
+    public R genUserSig(@RequestHeader("token") String token) throws JSONException {
+        int id = jwtUtil.getUserId(token);
+        TLSSigAPIv2 api = new TLSSigAPIv2(appId, key);
+        String userSig = api.genUserSig(String.valueOf(id), expire);
+        return R.ok().put("userSig", userSig).put("id", id);
     }
 
 }

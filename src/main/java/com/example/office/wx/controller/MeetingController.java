@@ -146,5 +146,18 @@ public class MeetingController {
     }
 
 
+
+    @GetMapping("/searchRoomIdById")
+    @ApiOperation("查询会议房间RoomID")
+    public R searchRoomIdById( Integer id) {
+        long roomId = meetingService.searchRoomIdById(id);
+        return R.ok().put("result", roomId);
+    }
+
+
+
+
+
+
 }
 
