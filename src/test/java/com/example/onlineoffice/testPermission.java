@@ -5,13 +5,16 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONException;
 import com.example.office.wx.OnlineOfficeApplication;
+import com.example.office.wx.db.mapper.TbMeetingMapper;
 import com.example.office.wx.db.mapper.TbUserMapper;
 import com.example.office.wx.db.pojo.TbMeeting;
 import com.example.office.wx.db.pojo.TbUser;
 import com.example.office.wx.service.MeetingService;
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,9 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -37,6 +42,10 @@ public class testPermission {
     private MeetingService meetingService;
     @Autowired
     private TbUserMapper tbUserMapper;
+    @Autowired
+    private TbMeetingMapper tbMeetingMapper;
+    @Autowired
+    private HistoryService historyService;
 
     @Test
     public void createMeetingData() {
@@ -150,6 +159,30 @@ public class testPermission {
             System.out.println("任务负责人：" + task.getAssignee());
             System.out.println("任务名称：" + task.getName());
         }
+    }
+
+    @Test
+    public void testMeeting(){
+        ArrayList<HashMap> hashMaps = tbMeetingMapper.searchMeetByUserId(48);
+
+    }
+
+    @Test
+    public void testHistory(){
+        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee("10").list();
+        HashMap result = new HashMap();
+        ArrayList<HashMap> meeting = new ArrayList<>();
+        for (HistoricTaskInstance taskInstance : list){
+            String instanceId = taskInstance.getProcessInstanceId();
+            String definitionId = taskInstance.getProcessDefinitionId();
+            if (definitionId.equals("MeetingProcess:2:009b7206-bc77-11ec-a39f-144f8a149005")){
+                //查询会议审批信息
+                HashMap map = meetingService.searchMeetbyInstanceId(instanceId, String.valueOf(10));
+                meeting.add(map);
+            }
+        }
+        result.put("meeting", meeting);
+        System.out.println(meeting.toString());
     }
 
 

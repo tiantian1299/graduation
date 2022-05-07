@@ -17,5 +17,20 @@ public interface ApprovalService {
      *
      * @param processInstanceId
      */
-    void completeTask(String processInstanceId, String result);
+    void completeTask(String processInstanceId, String result,String type);
+
+    /**
+     * 查询某人的已审批列表
+     * @param operator
+     * @return
+     */
+    HashMap getApprovaledList(String operator);
+
+    /**
+     * 获取员工的申请列表
+     * @param id
+     * @return
+     */
+    HashMap getUserAssignList(int id);
+
 }

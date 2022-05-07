@@ -18,11 +18,12 @@
         <result column="instance_id" jdbcType="VARCHAR" property="instanceId"/>
         <result column="status" jdbcType="SMALLINT" property="status"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="isSend" jdbcType="TINYINT" property="isSend"></result>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         id, uuid, title, creator_id, `date`, place, `start`, `end`, `type`, members, `desc`,
-        instance_id, `status`, create_time
+        instance_id, `status`, create_time ,isSend
     </sql>
     <insert id="insertMeeting" parameterType="com.example.office.wx.db.pojo.TbMeeting">
         INSERT INTO tb_meeting
@@ -40,6 +41,7 @@
         `desc` = #{desc},
         instance_id = #{instanceId},
         status = #{status},
+        isSend = 0,
         create_time = NOW()
     </insert>
 
@@ -60,7 +62,7 @@
 	    m.status,
 	    m.desc,
 	    u2.photo,
-	    TIMESTAMPDIFF(HOUR,CONCAT(m.date," ",m.start),CONCAT(m.date," ",m.end)) AS hour
+	    TIMESTAMPDIFF(minute,CONCAT(m.date," ",m.start),CONCAT(m.date," ",m.end)) AS minute
     FROM tb_meeting m
 	JOIN tb_user u1 ON JSON_CONTAINS ( m.members, CAST( u1.id AS CHAR ) )
 	JOIN tb_user u2 ON m.creator_id = u2.id
@@ -164,21 +166,92 @@
         WHERE id = #{id}
           AND status = 3
     </delete>
+
     <select id="searchMeetbyInstanceId" parameterType="map" resultType="java.util.HashMap">
         select meet.id,
                u1.photo as creatorPhoto,
                u2.photo as approvalPhoto,
                (case meet.type
                     when 1 then '在线会议'
-                    when 3 then '线下会议'
+                    when 2 then '线下会议'
                    end) as type,
                TIMESTAMPDIFF(MINUTE,meet.`start`, meet.`end`) as minute,
                 meet.date,
                 meet.`status`,
         u1.`name` as creator,u2.name as approval
         from tb_meeting meet
-        left join tb_user u1 on u1.id = meet.creator_id
-        left join tb_user u2 on u2.id = #{id}
+        join tb_user u1 on u1.id = meet.creator_id
+        join tb_user u2 on u2.id = #{id}
         where meet.instance_id = #{instanceId}
     </select>
+
+    <update id="updateStatus" parameterType="map">
+        UPDATE tb_meeting
+        SET
+        status = #{status}
+        where instance_id = #{instanceId}
+    </update>
+    <update id="updateSend" parameterType='integer'>
+        UPDATE tb_meeting
+        SET
+            isSend = 1
+        where id = #{id}
+    </update>
+
+    <select id="searchForEmail" resultType="java.util.HashMap">
+        select
+            CAST( meet.id AS CHAR) as id,
+            u.email,
+            meet.title,
+            meet.members,
+            GROUP_CONCAT( u2.email ) as membersEmail,
+            CAST(	meet.`start` AS CHAR) as start,
+            CAST(	meet.`end` AS CHAR) as end,
+	( CASE meet.type WHEN 1 THEN '在线会议' WHEN 2 THEN '线下会议' END ) AS type,
+	TIMESTAMPDIFF( MINUTE, meet.`start`, meet.`end` ) AS minute,
+	CAST(	meet.`date` AS CHAR) as date,
+        	meet.status
+        FROM
+            tb_meeting meet
+            LEFT JOIN tb_user u ON meet.creator_id = u.id
+            LEFT JOIN tb_user u2 ON JSON_CONTAINS(
+            meet.members,
+            (
+            CAST( u2.id AS CHAR )))
+        where meet.status = 3 and meet.isSend = 0
+        group by (meet.id)
+    </select>
+
+    <select id="searchMeetByUserId" parameterType="int" resultType="java.util.HashMap">
+        select meet.id,
+               u1.photo as creatorPhoto,
+               u2.photo as approvalPhoto,
+               (case meet.type
+                    when 1 then '在线会议'
+                    when 2 then '线下会议'
+                   end) as type,
+               TIMESTAMPDIFF(MINUTE,meet.`start`, meet.`end`) as minute,
+                CAST(	meet.`date` AS CHAR) as date,
+                meet.`status`,
+        u1.`name` as creator,u2.name as approval
+        from tb_meeting meet
+           left join tb_user u1 on u1.id = meet.creator_id
+           left join act_hi_taskinst task on meet.instance_id = task.PROC_INST_ID_
+           left join tb_user u2 on task.ASSIGNEE_ = u2.id
+        where meet.creator_id = #{id}
+        order by meet.status
+    </select>
+    <select id="searchUserMeetingInMonth" parameterType="Map" resultType="String">
+        SELECT
+            DISTINCT DATE_FORMAT( m.date, '%Y-%m-%d' ) AS date
+        FROM tb_meeting m
+            JOIN tb_user u ON JSON_CONTAINS ( m.members, CAST( u.id AS CHAR ) )
+        WHERE u.id = #{userId}
+          AND u.status = 1
+          AND m.status IN(3,4)
+          AND DATE_FORMAT(m.date,'%Y-%c')=#{express}
+    </select>
+
+
+
 </mapper>

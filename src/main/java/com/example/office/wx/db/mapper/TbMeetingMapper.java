@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 @Mapper
@@ -58,4 +59,38 @@ public interface TbMeetingMapper {
      * @return
      */
    HashMap searchMeetbyInstanceId (HashMap params);
+
+    /**
+     * 更新会议状态
+     * @param instanceId
+     * @return
+     */
+    int updateStatus(String instanceId,int status);
+
+    /**
+     * 查询邮件字段
+     * @return
+     */
+    ArrayList<HashMap> searchForEmail();
+
+    /**
+     * 更新会议id
+     * @param id
+     * @return
+     */
+    int updateSend(Integer id);
+
+    /**
+     * 查询员工的会议申请列表
+     * @param id
+     * @return
+     */
+    ArrayList<HashMap> searchMeetByUserId(int id);
+
+    /**
+     * 查询用户一个月的会议 日期
+     * @param param
+     * @return
+     */
+    public List<String> searchUserMeetingInMonth(HashMap param);
 }

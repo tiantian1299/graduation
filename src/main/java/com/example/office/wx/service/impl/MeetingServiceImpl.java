@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -39,15 +40,19 @@ public class MeetingServiceImpl implements MeetingService {
             //查询该部门的部门经理id
             int deptManager = tbUserMapper.searchDeptManger(Math.toIntExact(entity.getCreatorId()));
             map.put("deptManager", deptManager);
+            map.put("isManager","否");
         } else {
             map.put("result", "同意");
+            map.put("isManager","是");
         }
-
         //开启工作流审批
         String instanceId = runtimeService.startProcessInstanceByKey("MeetingProcess", map).getProcessInstanceId();
         if (StringUtils.isNotEmpty(instanceId)) {
             //保存数据
             entity.setInstanceId(instanceId);
+            if(identity.equals("领导")){
+                entity.setStatus((short) 3);
+            }
             int row = tbMeetingMapper.insertMeeting(entity);
             if (row != 1) {
                 throw new OfficeException("会议添加失败");
@@ -190,5 +195,11 @@ public class MeetingServiceImpl implements MeetingService {
         map.put("id", Integer.parseInt(id));
         HashMap result = tbMeetingMapper.searchMeetbyInstanceId(map);
         return result;
+    }
+
+    @Override
+    public List<String> searchUserMeetingInMonth(HashMap param) {
+        List list=tbMeetingMapper.searchUserMeetingInMonth(param);
+        return list;
     }
 }

@@ -25,4 +25,9 @@ public class EmailTask implements Serializable {
         message.setFrom(mailbox);
         javaMailSender.send(message);
     }
+
+    public void sendMessage(SimpleMailMessage message){
+        message.setFrom(mailbox);
+        javaMailSender.send(message);
+    }
 }

@@ -9,7 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
@@ -21,7 +26,7 @@ import java.util.List;
                 org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration.class
         })
 @ServletComponentScan
-//开启异步多线程
+@EnableScheduling
 @EnableAsync
 @Slf4j
 public class OnlineOfficeApplication {
@@ -51,5 +56,12 @@ public class OnlineOfficeApplication {
                 log.error("处理异常");
             }
         }
+    }
+
+    @Primary
+    @Bean
+    public TaskExecutor primaryTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        return executor;
     }
 }

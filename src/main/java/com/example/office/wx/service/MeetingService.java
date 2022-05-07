@@ -4,6 +4,7 @@ import com.example.office.wx.db.pojo.TbMeeting;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public interface MeetingService {
 
@@ -36,4 +37,14 @@ public interface MeetingService {
     void deleteMeetingById(int id);
 
     HashMap searchMeetbyInstanceId(String instanceId, String id);
+
+    /**
+     * 查询用户一个月的会议信息
+     * @param param
+     * @return
+     */
+    public List<String> searchUserMeetingInMonth(HashMap param);
+
+
+
 }

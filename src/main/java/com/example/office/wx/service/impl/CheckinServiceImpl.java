@@ -68,7 +68,6 @@ public class CheckinServiceImpl implements CheckinService {
         if (isHoliday) {
             type = "节假日";
         }
-
         if (type.equals("节假日")) {
             return "节假日不需要考勤";
         } else {
@@ -236,7 +235,6 @@ public class CheckinServiceImpl implements CheckinService {
                         break;
                     }
                 }
-
                 //工作日，但是考勤时间还没有结束  （DateUtil.today() ==> yyyy-mm-dd）
                 DateTime workEndTime = DateUtil.parse(DateUtil.today() + " " + constants.workEndTime);
                 String today = DateUtil.today();

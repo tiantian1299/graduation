@@ -73,8 +73,8 @@ public class CheckinController {
 
         //查询用户当天的考勤情况
         HashMap resultMap = checkinService.queryTodayCheckin(userId);
-        resultMap.put("workStartTime", constants.workStartTime);
-        resultMap.put("workEndTime", constants.workEndTime);
+        resultMap.put("workStartTime", constants.workTime);
+        resultMap.put("workEndTime", constants.closeTime);
         //查询用户累计签到天数
         Long checkinDays = checkinService.queryCheckinDays(userId);
         resultMap.put("checkinDays", checkinDays);

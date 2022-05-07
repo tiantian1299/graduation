@@ -76,6 +76,16 @@ public class TbMeeting {
     */
     private Date createTime;
 
+    private int isSend;
+
+    public int getIsSend() {
+        return isSend;
+    }
+
+    public void setIsSend(int isSend) {
+        this.isSend = isSend;
+    }
+
     public Long getId() {
         return id;
     }

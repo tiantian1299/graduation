@@ -8,6 +8,7 @@ import com.example.office.wx.common.util.R;
 import com.example.office.wx.config.shiro.JwtUtil;
 import com.example.office.wx.controller.form.InsertMeetingForm;
 import com.example.office.wx.controller.form.SearchMyMeetingListByPageForm;
+import com.example.office.wx.controller.form.SearchUserMeetingInMonthForm;
 import com.example.office.wx.controller.form.UpdateMeetingForm;
 import com.example.office.wx.db.pojo.TbMeeting;
 import com.example.office.wx.exception.OfficeException;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/meeting")
@@ -130,6 +132,17 @@ public class MeetingController {
     public R searchMeetingById(@RequestParam Integer id) {
         HashMap map = meetingService.searchMeetingById(id);
         return R.ok().put("result", map);
+    }
+
+    @PostMapping("/searchUserMeetingInMonth")
+    @ApiOperation("查询某月用户的会议日期列表")
+    public R searchUserMeetingInMonth(@Valid @RequestBody SearchUserMeetingInMonthForm form, @RequestHeader("token") String token) {
+        int userId = jwtUtil.getUserId(token);
+        HashMap param = new HashMap();
+        param.put("userId", userId);
+        param.put("express", form.getYear()+"-"+form.getMonth());
+        List<String> list = meetingService.searchUserMeetingInMonth(param);
+        return R.ok().put("result", list);
     }
 
 
