@@ -3,7 +3,7 @@ package com.example.office.wx.controller;
 import cn.hutool.json.JSONUtil;
 import com.example.office.wx.common.util.R;
 import com.example.office.wx.controller.form.AddRoleForm;
-import com.example.office.wx.controller.form.DeleteRoleForm;
+import com.example.office.wx.controller.form.DeleteForm;
 import com.example.office.wx.controller.form.UpdateRolePermissionsForm;
 import com.example.office.wx.db.pojo.TbRole;
 import com.example.office.wx.exception.OfficeException;
@@ -66,7 +66,7 @@ public class RoleController {
     @PostMapping("/deleteRoleById")
     @ApiOperation("根据ID删除角色")
     @RequiresPermissions(value = {"ROOT", "ROLE:DELETE"}, logical = Logical.OR)
-    public R deleteRoleById(@Valid @RequestBody DeleteRoleForm form) {
+    public R deleteRoleById(@Valid @RequestBody DeleteForm form) {
         roleService.deleteRoleById(form.getId());
         return R.ok().put("result", "success");
     }

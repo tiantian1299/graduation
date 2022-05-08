@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.office.wx.db.mapper.TbWeeklyReportMapper">
+  <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.TbWeeklyReport">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="THIS_WEEK_CONTENT" jdbcType="VARCHAR" property="thisWeekContent" />
+    <result column="NEXT_WEEK_PLAN" jdbcType="VARCHAR" property="nextWeekPlan" />
+    <result column="CREATE_USER_ID" jdbcType="INTEGER" property="createUserId" />
+    <result column="CC_USER_IDS" jdbcType="OTHER" property="ccUserIds" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+  </resultMap>
+  <resultMap id="BaseResultDto" type="com.example.office.wx.db.dto.TbWeeklyReportDto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="THIS_WEEK_CONTENT" jdbcType="VARCHAR" property="thisWeekContent" />
+    <result column="NEXT_WEEK_PLAN" jdbcType="VARCHAR" property="nextWeekPlan" />
+    <result column="CREATE_USER_ID" jdbcType="INTEGER" property="createUserId" />
+    <result column="CC_USER_IDS" jdbcType="VARCHAR" property="ccUserIds" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="name" jdbcType="VARCHAR" property="name"></result>
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, THIS_WEEK_CONTENT, NEXT_WEEK_PLAN, CREATE_USER_ID, CC_USER_IDS, CREATE_DATE, 
+    TITLE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_weekly_report
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_weekly_report
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbWeeklyReport" useGeneratedKeys="true">
+    insert into tb_weekly_report (THIS_WEEK_CONTENT, NEXT_WEEK_PLAN, CREATE_USER_ID, 
+      CC_USER_IDS, CREATE_DATE, TITLE
+      )
+    values (#{thisWeekContent,jdbcType=VARCHAR}, #{nextWeekPlan,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
+      #{ccUserIds,jdbcType=OTHER}, #{createDate,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbWeeklyReport" useGeneratedKeys="true">
+    insert into tb_weekly_report
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="thisWeekContent != null">
+        THIS_WEEK_CONTENT,
+      </if>
+      <if test="nextWeekPlan != null">
+        NEXT_WEEK_PLAN,
+      </if>
+      <if test="createUserId != null">
+        CREATE_USER_ID,
+      </if>
+      <if test="ccUserIds != null">
+        CC_USER_IDS,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="title != null">
+        TITLE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="thisWeekContent != null">
+        #{thisWeekContent,jdbcType=VARCHAR},
+      </if>
+      <if test="nextWeekPlan != null">
+        #{nextWeekPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="ccUserIds != null">
+        #{ccUserIds,jdbcType=OTHER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.office.wx.db.pojo.TbWeeklyReport">
+    update tb_weekly_report
+    <set>
+      <if test="thisWeekContent != null">
+        THIS_WEEK_CONTENT = #{thisWeekContent,jdbcType=VARCHAR},
+      </if>
+      <if test="nextWeekPlan != null">
+        NEXT_WEEK_PLAN = #{nextWeekPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        CREATE_USER_ID = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="ccUserIds != null">
+        CC_USER_IDS = #{ccUserIds,jdbcType=OTHER},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null">
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbWeeklyReport">
+    update tb_weekly_report
+    set THIS_WEEK_CONTENT = #{thisWeekContent,jdbcType=VARCHAR},
+      NEXT_WEEK_PLAN = #{nextWeekPlan,jdbcType=VARCHAR},
+      CREATE_USER_ID = #{createUserId,jdbcType=INTEGER},
+      CC_USER_IDS = #{ccUserIds,jdbcType=OTHER},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      TITLE = #{title,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getWeeklyReportList" parameterType="HashMap" resultMap="BaseResultDto">
+    select * , u.name from tb_weekly_report r
+    left join tb_user u on r.CREATE_USER_ID = u.id
+    where 1=1
+    <if test=" userId != null">
+      and r.CREATE_USER_ID = #{userId}
+    </if>
+    <if test="ccUserId != null">
+      and JSON_CONTAINS(r.CC_USER_IDS, cast(#{ccUserId} as char))
+    </if>
+    order by r.CREATE_DATE desc
+    LIMIT #{start},#{length}
+  </select>
+
+  <select id="getWeeklyByDay" parameterType="HashMap" resultMap="BaseResultMap">
+    select * from tb_weekly_report r
+    where r.CREATE_DATE BETWEEN #{startTime}
+    and #{endTime}
+    and r.CREATE_USER_ID = #{userId}
+  </select>
+  <select id="searchReportById"  parameterType="int" resultType="HashMap">
+    select
+    id as id, THIS_WEEK_CONTENT as thisWeekContent, NEXT_WEEK_PLAN as nextWeekPlan
+    from tb_weekly_report
+    where id= #{id}
+  </select>
+
+  <select id="searchCcUser" parameterType="int" resultType="HashMap">
+    SELECT u.id,
+    u.name,
+    u.photo
+    FROM tb_weekly_report  r
+    JOIN tb_user u ON JSON_CONTAINS(r.CC_USER_IDS, CAST(u.id AS CHAR))
+    WHERE r.id = #{id}
+    and u.status = 1
+  </select>
+</mapper>

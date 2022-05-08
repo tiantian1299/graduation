@@ -4,6 +4,7 @@ import com.example.office.wx.db.mapper.TbMeetingMapper;
 import com.example.office.wx.service.ApprovalService;
 import com.example.office.wx.service.MeetingService;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ApprovalServiceImpl implements ApprovalService {
 
     @Autowired

@@ -7,7 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.example.office.wx.common.util.R;
 import com.example.office.wx.config.shiro.JwtUtil;
 import com.example.office.wx.controller.form.InsertMeetingForm;
-import com.example.office.wx.controller.form.SearchMyMeetingListByPageForm;
+import com.example.office.wx.controller.form.SearchPageForm;
 import com.example.office.wx.controller.form.SearchUserMeetingInMonthForm;
 import com.example.office.wx.controller.form.UpdateMeetingForm;
 import com.example.office.wx.db.pojo.TbMeeting;
@@ -38,7 +38,7 @@ public class MeetingController {
 
     @PostMapping("/searchMyMeetingListByPage")
     @ApiOperation("查询会议列表分页数据")
-    public R searchMyMeetingListByPage(@Valid @RequestBody SearchMyMeetingListByPageForm form, @RequestHeader("token") String token) {
+    public R searchMyMeetingListByPage(@Valid @RequestBody SearchPageForm form, @RequestHeader("token") String token) {
         int userId = jwtUtil.getUserId(token);
         int page = form.getPage();
         int length = form.getLength();
