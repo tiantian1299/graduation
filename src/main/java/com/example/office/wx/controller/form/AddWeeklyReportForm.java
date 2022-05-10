@@ -10,6 +10,9 @@ import javax.validation.constraints.NotBlank;
 @ApiModel
 public class AddWeeklyReportForm {
 
+    @NotBlank(message = "周报标题不能为空")
+    private String  title;
+
     /**
      * 本周工作内容
      */
