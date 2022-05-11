@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.office.wx.db.mapper.TbLeaveApplyMapper">
+  <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.TbLeaveApply">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="LEAVE_TYPE" jdbcType="INTEGER" property="leaveType" />
+    <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="END_TIME" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="LEAVE_DURATION" jdbcType="VARCHAR" property="leaveDuration" />
+    <result column="REASON" jdbcType="VARCHAR" property="reason" />
+    <result column="CREATOR_ID" jdbcType="INTEGER" property="creatorId" />
+    <result column="INSTANCE_ID" jdbcType="VARCHAR" property="instanceId" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="ATTACHMENT" jdbcType="OTHER" property="attachment" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, LEAVE_TYPE, START_TIME, END_TIME, LEAVE_DURATION, REASON, CREATOR_ID, INSTANCE_ID, 
+    `STATUS`, ATTACHMENT, CREATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_leave_apply
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_leave_apply
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="ID" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbLeaveApply" useGeneratedKeys="true">
+    insert into tb_leave_apply (LEAVE_TYPE, START_TIME, END_TIME, 
+      LEAVE_DURATION, REASON, CREATOR_ID, 
+      INSTANCE_ID, `STATUS`, ATTACHMENT, 
+      CREATE_TIME)
+    values (#{leaveType,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{leaveDuration,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER}, 
+      #{instanceId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{attachment,jdbcType=OTHER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="ID" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbLeaveApply" useGeneratedKeys="true">
+    insert into tb_leave_apply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="leaveType != null">
+        LEAVE_TYPE,
+      </if>
+      <if test="startTime != null">
+        START_TIME,
+      </if>
+      <if test="endTime != null">
+        END_TIME,
+      </if>
+      <if test="leaveDuration != null">
+        LEAVE_DURATION,
+      </if>
+      <if test="reason != null">
+        REASON,
+      </if>
+      <if test="creatorId != null">
+        CREATOR_ID,
+      </if>
+      <if test="instanceId != null">
+        INSTANCE_ID,
+      </if>
+      <if test="status != null">
+        `STATUS`,
+      </if>
+      <if test="attachment != null">
+        ATTACHMENT,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="leaveType != null">
+        #{leaveType,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="leaveDuration != null">
+        #{leaveDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="instanceId != null">
+        #{instanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="attachment != null">
+        #{attachment,jdbcType=OTHER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.office.wx.db.pojo.TbLeaveApply">
+    update tb_leave_apply
+    <set>
+      <if test="leaveType != null">
+        LEAVE_TYPE = #{leaveType,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        START_TIME = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        END_TIME = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="leaveDuration != null">
+        LEAVE_DURATION = #{leaveDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        REASON = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        CREATOR_ID = #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="instanceId != null">
+        INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `STATUS` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="attachment != null">
+        ATTACHMENT = #{attachment,jdbcType=OTHER},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbLeaveApply">
+    update tb_leave_apply
+    set LEAVE_TYPE = #{leaveType,jdbcType=INTEGER},
+      START_TIME = #{startTime,jdbcType=TIMESTAMP},
+      END_TIME = #{endTime,jdbcType=TIMESTAMP},
+      LEAVE_DURATION = #{leaveDuration,jdbcType=VARCHAR},
+      REASON = #{reason,jdbcType=VARCHAR},
+      CREATOR_ID = #{creatorId,jdbcType=INTEGER},
+      INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
+      `STATUS` = #{status,jdbcType=INTEGER},
+      ATTACHMENT = #{attachment,jdbcType=OTHER},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
