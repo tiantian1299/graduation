@@ -140,6 +140,7 @@
     and r.CREATE_USER_ID = #{userId}
   </select>
   <select id="searchReportById"  parameterType="int" resultType="HashMap">
+
     select
     id as id, THIS_WEEK_CONTENT as thisWeekContent, NEXT_WEEK_PLAN as nextWeekPlan,TITLE as title
     from tb_weekly_report
