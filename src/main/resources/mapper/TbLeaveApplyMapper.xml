@@ -13,10 +13,11 @@
     <result column="STATUS" jdbcType="INTEGER" property="status" />
     <result column="ATTACHMENT" jdbcType="OTHER" property="attachment" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="APPROVAL_ID" jdbcType="INTEGER" property="approvalId" />
   </resultMap>
   <sql id="Base_Column_List">
     ID, LEAVE_TYPE, START_TIME, END_TIME, LEAVE_DURATION, REASON, CREATOR_ID, INSTANCE_ID, 
-    `STATUS`, ATTACHMENT, CREATE_TIME
+    `STATUS`, ATTACHMENT, CREATE_TIME, APPROVAL_ID
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -32,11 +33,11 @@
     insert into tb_leave_apply (LEAVE_TYPE, START_TIME, END_TIME, 
       LEAVE_DURATION, REASON, CREATOR_ID, 
       INSTANCE_ID, `STATUS`, ATTACHMENT, 
-      CREATE_TIME)
+      CREATE_TIME, APPROVAL_ID)
     values (#{leaveType,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
       #{leaveDuration,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER}, 
       #{instanceId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{attachment,jdbcType=OTHER}, 
-      #{createTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{approvalId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="ID" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbLeaveApply" useGeneratedKeys="true">
     insert into tb_leave_apply
@@ -71,6 +72,9 @@
       <if test="createTime != null">
         CREATE_TIME,
       </if>
+      <if test="approvalId != null">
+        APPROVAL_ID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="leaveType != null">
@@ -102,6 +106,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalId != null">
+        #{approvalId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -138,6 +145,9 @@
       <if test="createTime != null">
         CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="approvalId != null">
+        APPROVAL_ID = #{approvalId,jdbcType=INTEGER},
+      </if>
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
@@ -152,7 +162,8 @@
       INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
       `STATUS` = #{status,jdbcType=INTEGER},
       ATTACHMENT = #{attachment,jdbcType=OTHER},
-      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      APPROVAL_ID = #{approvalId,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

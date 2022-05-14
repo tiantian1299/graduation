@@ -1,8 +1,9 @@
 package com.example.office.wx.db.pojo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * tb_leave_apply
@@ -64,6 +65,11 @@ public class TbLeaveApply implements Serializable {
      * 创建时间
      */
     private Date createTime;
+
+    /**
+     * 审批人ID
+     */
+    private Integer approvalId;
 
     private static final long serialVersionUID = 1L;
 }

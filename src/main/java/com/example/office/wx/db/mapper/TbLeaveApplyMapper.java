@@ -1,9 +1,7 @@
 package com.example.office.wx.db.mapper;
 
 import com.example.office.wx.db.pojo.TbLeaveApply;
-import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
 public interface TbLeaveApplyMapper {
     int deleteByPrimaryKey(Integer id);
 
