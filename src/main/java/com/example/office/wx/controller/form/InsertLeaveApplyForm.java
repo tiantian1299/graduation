@@ -14,10 +14,10 @@ public class InsertLeaveApplyForm {
     private Integer leaveType;
 
     @NotNull
-    private Date startTime;
+    private String startTime;
 
     @NotNull
-    private Date endTime;
+    private String endTime;
 
     @NotBlank
     private String leaveDuration;

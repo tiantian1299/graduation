@@ -50,4 +50,20 @@ public class ReimbursementServiceImpl implements ReimbursementService {
             throw new OfficeException("工作流启动失败");
         }
     }
+
+    /**
+     * 查询费用报销待审批列表
+     *
+     * @param instanceId
+     * @param id
+     * @return
+     */
+    @Override
+    public HashMap searchReimbursementByInstanceId(String instanceId, String id) {
+        HashMap map = new HashMap<>();
+        map.put("instanceId", instanceId);
+        map.put("id", Integer.parseInt(id));
+        HashMap result = tbReimbursementMapper.searchReimbursementByInstanceId(map);
+        return result;
+    }
 }

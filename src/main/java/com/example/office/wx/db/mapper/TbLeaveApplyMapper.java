@@ -1,7 +1,11 @@
 package com.example.office.wx.db.mapper;
 
 import com.example.office.wx.db.pojo.TbLeaveApply;
+import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
+
+@Mapper
 public interface TbLeaveApplyMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +18,11 @@ public interface TbLeaveApplyMapper {
     int updateByPrimaryKeySelective(TbLeaveApply record);
 
     int updateByPrimaryKey(TbLeaveApply record);
+
+    /**
+     * 根据请假申请流程id查询请假申请信息
+     * @param params
+     * @return
+     */
+    HashMap searchLeaveApplyByInstanceId(HashMap params);
 }

@@ -18,17 +18,18 @@ import java.util.HashMap;
 @Slf4j
 public class LeaveApplyServiceImpl implements LeaveApplyService {
 
-    @Autowired
+    @Autowired(required = false)
     private TbLeaveApplyMapper tbLeaveApplyMapper;
 
     @Autowired
     private RuntimeService runtimeService;
 
-    @Autowired
+    @Autowired(required = false)
     private TbUserMapper tbUserMapper;
 
     /**
      * 请假申请
+     *
      * @param entity
      */
     @Override
@@ -37,9 +38,10 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
         int deptManager = tbUserMapper.searchDeptManger(Math.toIntExact(entity.getCreatorId()));
         map.put("deptManager", deptManager);
         //开启工作流审批
-        String instanceId = runtimeService.startProcessInstanceByKey("ReimbursementProcess", map).getProcessInstanceId();
+        String instanceId = runtimeService.startProcessInstanceByKey("LeaveApplyProcess", map).getProcessInstanceId();
         if (StringUtils.isNotEmpty(instanceId)) {
             entity.setInstanceId(instanceId);
+            entity.setApprovalId(deptManager);
             entity.setStatus(1);
             int result = tbLeaveApplyMapper.insertSelective(entity);
             if (result != 1) {
@@ -48,5 +50,21 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
         } else {
             throw new OfficeException("工作流启动失败");
         }
+    }
+
+    /**
+     * 查询请假申请待办列表
+     *
+     * @param instanceId
+     * @param id
+     * @return
+     */
+    @Override
+    public HashMap searchLeaveApplyByInstanceId(String instanceId, String id) {
+        HashMap map = new HashMap<>();
+        map.put("instanceId", instanceId);
+        map.put("id", Integer.parseInt(id));
+        HashMap result = tbLeaveApplyMapper.searchLeaveApplyByInstanceId(map);
+        return result;
     }
 }

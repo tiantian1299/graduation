@@ -40,9 +40,9 @@ public class testPermission {
     RepositoryService repositoryService;
     @Autowired(required = true)
     private MeetingService meetingService;
-    @Autowired
+    @Autowired(required = false)
     private TbUserMapper tbUserMapper;
-    @Autowired
+    @Autowired(required = false)
     private TbMeetingMapper tbMeetingMapper;
     @Autowired
     private HistoryService historyService;
@@ -175,9 +175,9 @@ public class testPermission {
         for (HistoricTaskInstance taskInstance : list){
             String instanceId = taskInstance.getProcessInstanceId();
             String definitionId = taskInstance.getProcessDefinitionId();
-            if (definitionId.equals("MeetingProcess:2:009b7206-bc77-11ec-a39f-144f8a149005")){
+            if (definitionId.contains("MeetingProcess")){
                 //查询会议审批信息
-                HashMap map = meetingService.searchMeetbyInstanceId(instanceId, String.valueOf(10));
+                HashMap map = meetingService.searchMeetByInstanceId(instanceId, String.valueOf(10));
                 meeting.add(map);
             }
         }

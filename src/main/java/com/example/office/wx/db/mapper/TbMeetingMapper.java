@@ -92,5 +92,5 @@ public interface TbMeetingMapper {
      * @param param
      * @return
      */
-    public List<String> searchUserMeetingInMonth(HashMap param);
+    List<String> searchUserMeetingInMonth(HashMap param);
 }

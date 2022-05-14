@@ -33,7 +33,7 @@ public class TbReimbursement implements Serializable {
     /**
      * 附件
      */
-    private Object attachment;
+    private String attachment;
 
     /**
      * 审批人ID

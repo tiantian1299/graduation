@@ -1,9 +1,11 @@
 package com.example.office.wx.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.example.office.wx.common.util.R;
 import com.example.office.wx.config.shiro.JwtUtil;
 import com.example.office.wx.controller.form.InsertReimbursementFrom;
 import com.example.office.wx.db.pojo.TbReimbursement;
+import com.example.office.wx.exception.OfficeException;
 import com.example.office.wx.service.ReimbursementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,13 +30,16 @@ public class ReimbursementController {
 
     @PostMapping("/insertReimbursement")
     @ApiOperation("申请费用报销")
-    @RequiresPermissions(value = {"ROOT"}, logical = Logical.OR)
     public R insertReimbursement(@Valid @RequestBody InsertReimbursementFrom form, @RequestHeader("token") String token) {
+        if (!JSONUtil.isJsonArray(form.getFilePathsList())) {
+            throw new OfficeException("filePathsList不是JSON数组");
+        }
+
         TbReimbursement entity = new TbReimbursement();
         entity.setMoney(form.getMoney());
         entity.setType(form.getType());
         entity.setMoneyDetail(form.getMoneyDetail());
-        entity.setAttachment(form.getFilePathsList());
+        entity.setAttachment(form.getFilePathsList().replaceAll("&quot;","\""));
         entity.setCreateId(jwtUtil.getUserId(token));
         entity.setCraeteTime(new Date());
         reimbursementService.insertReimbursement(entity);

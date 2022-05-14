@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.office.wx.db.mapper.TbReimbursementMapper">
-  <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.TbReimbursement">
-    <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="MONEY" jdbcType="DOUBLE" property="money" />
-    <result column="TYPE" jdbcType="INTEGER" property="type" />
-    <result column="MONEY_DETAIL" jdbcType="VARCHAR" property="moneyDetail" />
-    <result column="ATTACHMENT" jdbcType="OTHER" property="attachment" />
-    <result column="APPROVAL_ID" jdbcType="INTEGER" property="approvalId" />
-    <result column="STATUS" jdbcType="INTEGER" property="status" />
-    <result column="INSTANCE_ID" jdbcType="VARCHAR" property="instanceId" />
-    <result column="CREATE_ID" jdbcType="INTEGER" property="createId" />
-    <result column="CRAETE_TIME" jdbcType="TIMESTAMP" property="craeteTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.TbReimbursement">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="MONEY" jdbcType="DOUBLE" property="money"/>
+        <result column="TYPE" jdbcType="INTEGER" property="type"/>
+        <result column="MONEY_DETAIL" jdbcType="VARCHAR" property="moneyDetail"/>
+        <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment"/>
+        <result column="APPROVAL_ID" jdbcType="INTEGER" property="approvalId"/>
+        <result column="STATUS" jdbcType="INTEGER" property="status"/>
+        <result column="INSTANCE_ID" jdbcType="VARCHAR" property="instanceId"/>
+        <result column="CREATE_ID" jdbcType="INTEGER" property="createId"/>
+        <result column="CRAETE_TIME" jdbcType="TIMESTAMP" property="craeteTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     ID, MONEY, `TYPE`, MONEY_DETAIL, ATTACHMENT, APPROVAL_ID, `STATUS`, INSTANCE_ID, 
     CREATE_ID, CRAETE_TIME
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tb_reimbursement
-    where ID = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_reimbursement
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_reimbursement
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="ID" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbReimbursement" useGeneratedKeys="true">
+    <insert id="insert" keyColumn="ID" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbReimbursement"
+            useGeneratedKeys="true">
     insert into tb_reimbursement (MONEY, `TYPE`, MONEY_DETAIL, 
       ATTACHMENT, APPROVAL_ID, `STATUS`, 
       INSTANCE_ID, CREATE_ID, CRAETE_TIME
@@ -37,106 +38,107 @@
       #{instanceId,jdbcType=VARCHAR}, #{createId,jdbcType=INTEGER}, #{craeteTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="ID" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbReimbursement" useGeneratedKeys="true">
-    insert into tb_reimbursement
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="money != null">
-        MONEY,
-      </if>
-      <if test="type != null">
-        `TYPE`,
-      </if>
-      <if test="moneyDetail != null">
-        MONEY_DETAIL,
-      </if>
-      <if test="attachment != null">
-        ATTACHMENT,
-      </if>
-      <if test="approvalId != null">
-        APPROVAL_ID,
-      </if>
-      <if test="status != null">
-        `STATUS`,
-      </if>
-      <if test="instanceId != null">
-        INSTANCE_ID,
-      </if>
-      <if test="createId != null">
-        CREATE_ID,
-      </if>
-      <if test="craeteTime != null">
-        CRAETE_TIME,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="money != null">
-        #{money,jdbcType=DOUBLE},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
-      </if>
-      <if test="moneyDetail != null">
-        #{moneyDetail,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment != null">
-        #{attachment,jdbcType=OTHER},
-      </if>
-      <if test="approvalId != null">
-        #{approvalId,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="instanceId != null">
-        #{instanceId,jdbcType=VARCHAR},
-      </if>
-      <if test="createId != null">
-        #{createId,jdbcType=INTEGER},
-      </if>
-      <if test="craeteTime != null">
-        #{craeteTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.office.wx.db.pojo.TbReimbursement">
-    update tb_reimbursement
-    <set>
-      <if test="money != null">
-        MONEY = #{money,jdbcType=DOUBLE},
-      </if>
-      <if test="type != null">
-        `TYPE` = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="moneyDetail != null">
-        MONEY_DETAIL = #{moneyDetail,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment != null">
-        ATTACHMENT = #{attachment,jdbcType=OTHER},
-      </if>
-      <if test="approvalId != null">
-        APPROVAL_ID = #{approvalId,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        `STATUS` = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="instanceId != null">
-        INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
-      </if>
-      <if test="createId != null">
-        CREATE_ID = #{createId,jdbcType=INTEGER},
-      </if>
-      <if test="craeteTime != null">
-        CRAETE_TIME = #{craeteTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where ID = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbReimbursement">
+    <insert id="insertSelective" keyColumn="ID" keyProperty="id"
+            parameterType="com.example.office.wx.db.pojo.TbReimbursement" useGeneratedKeys="true">
+        insert into tb_reimbursement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="money != null">
+                MONEY,
+            </if>
+            <if test="type != null">
+                `TYPE`,
+            </if>
+            <if test="moneyDetail != null">
+                MONEY_DETAIL,
+            </if>
+            <if test="attachment != null">
+                ATTACHMENT,
+            </if>
+            <if test="approvalId != null">
+                APPROVAL_ID,
+            </if>
+            <if test="status != null">
+                `STATUS`,
+            </if>
+            <if test="instanceId != null">
+                INSTANCE_ID,
+            </if>
+            <if test="createId != null">
+                CREATE_ID,
+            </if>
+            <if test="craeteTime != null">
+                CRAETE_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="money != null">
+                #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="moneyDetail != null">
+                #{moneyDetail,jdbcType=VARCHAR},
+            </if>
+            <if test="attachment != null">
+                #{attachment,jdbcType=VARCHAR},
+            </if>
+            <if test="approvalId != null">
+                #{approvalId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="instanceId != null">
+                #{instanceId,jdbcType=VARCHAR},
+            </if>
+            <if test="createId != null">
+                #{createId,jdbcType=INTEGER},
+            </if>
+            <if test="craeteTime != null">
+                #{craeteTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.office.wx.db.pojo.TbReimbursement">
+        update tb_reimbursement
+        <set>
+            <if test="money != null">
+                MONEY = #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="type != null">
+                `TYPE` = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="moneyDetail != null">
+                MONEY_DETAIL = #{moneyDetail,jdbcType=VARCHAR},
+            </if>
+            <if test="attachment != null">
+                ATTACHMENT = #{attachment,jdbcType=VARCHAR},
+            </if>
+            <if test="approvalId != null">
+                APPROVAL_ID = #{approvalId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                `STATUS` = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="instanceId != null">
+                INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
+            </if>
+            <if test="createId != null">
+                CREATE_ID = #{createId,jdbcType=INTEGER},
+            </if>
+            <if test="craeteTime != null">
+                CRAETE_TIME = #{craeteTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbReimbursement">
     update tb_reimbursement
     set MONEY = #{money,jdbcType=DOUBLE},
       `TYPE` = #{type,jdbcType=INTEGER},
       MONEY_DETAIL = #{moneyDetail,jdbcType=VARCHAR},
-      ATTACHMENT = #{attachment,jdbcType=OTHER},
+      ATTACHMENT = #{attachment,jdbcType=VARCHAR},
       APPROVAL_ID = #{approvalId,jdbcType=INTEGER},
       `STATUS` = #{status,jdbcType=INTEGER},
       INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
@@ -144,4 +146,23 @@
       CRAETE_TIME = #{craeteTime,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="searchReimbursementByInstanceId" parameterType="map" resultType="java.util.HashMap">
+        select
+        re.*,
+        u1.photo as creatorPhoto,
+        u2.photo as approvalPhoto,
+        (case re.type
+            when 1 then '采购经费'
+            when 2 then '活动经费'
+           end) as typeName,
+        u1.`name` as creator,
+        u2.name as approval
+        from tb_reimbursement re
+        join tb_user u1 on u1.id = re.CREATE_ID
+        join tb_user u2 on u2.id = re.APPROVAL_ID
+        where 1=1
+        and re.INSTANCE_ID=#{instanceId}
+        and re.APPROVAL_ID=#{id}
+    </select>
 </mapper>

@@ -36,14 +36,14 @@ public interface MeetingService {
 
     void deleteMeetingById(int id);
 
-    HashMap searchMeetbyInstanceId(String instanceId, String id);
+    HashMap searchMeetByInstanceId(String instanceId, String id);
 
     /**
      * 查询用户一个月的会议信息
      * @param param
      * @return
      */
-    public List<String> searchUserMeetingInMonth(HashMap param);
+    List<String> searchUserMeetingInMonth(HashMap param);
 
 
 

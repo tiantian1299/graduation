@@ -189,7 +189,7 @@ public class MeetingServiceImpl implements MeetingService {
      * @return
      */
     @Override
-    public HashMap searchMeetbyInstanceId(String instanceId, String id) {
+    public HashMap searchMeetByInstanceId(String instanceId, String id) {
         HashMap map = new HashMap<>();
         map.put("instanceId", instanceId);
         map.put("id", Integer.parseInt(id));

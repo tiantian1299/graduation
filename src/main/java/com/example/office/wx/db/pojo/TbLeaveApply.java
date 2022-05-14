@@ -24,12 +24,12 @@ public class TbLeaveApply implements Serializable {
     /**
      * 开始时间
      */
-    private Date startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private Date endTime;
+    private String endTime;
 
     /**
      * 时长（天）
@@ -59,7 +59,7 @@ public class TbLeaveApply implements Serializable {
     /**
      * 附件
      */
-    private Object attachment;
+    private String attachment;
 
     /**
      * 创建时间
