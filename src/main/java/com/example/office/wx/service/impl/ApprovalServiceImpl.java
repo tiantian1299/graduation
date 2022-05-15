@@ -1,6 +1,8 @@
 package com.example.office.wx.service.impl;
 
 import com.example.office.wx.db.mapper.TbMeetingMapper;
+import com.example.office.wx.db.pojo.TbLeaveApply;
+import com.example.office.wx.db.pojo.TbReimbursement;
 import com.example.office.wx.service.ApprovalService;
 import com.example.office.wx.service.LeaveApplyService;
 import com.example.office.wx.service.MeetingService;
@@ -13,6 +15,7 @@ import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,12 +84,59 @@ public class ApprovalServiceImpl implements ApprovalService {
      * @param processInstanceId
      */
     @Override
+    @Transactional
     public void completeTask(String processInstanceId, String result, String type) {
         Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
         HashMap map = new HashMap();
         if (type.equals("会议")) {
             map.put("result", result);
             map.put("processInstanceId", processInstanceId);
+        }else if ("费用报销".equals(type)){
+            TbReimbursement reimbursement=reimbursementService.searchReimbursementByInstanceId(processInstanceId);
+            if (reimbursement!=null){
+                map.put("result", result);
+                map.put("processInstanceId", processInstanceId);
+                if (Integer.valueOf(result) == 1) {
+                    if (reimbursement.getStatus()==1){
+                        map.put("financeManager", processInstanceId);
+                        reimbursement.setApprovalId(0);
+                        reimbursement.setStatus(2);
+                    }else if (reimbursement.getStatus()==2){
+                        map.put("financeManager", processInstanceId);
+                        reimbursement.setApprovalId(0);
+                        reimbursement.setStatus(3);
+                    }else if (reimbursement.getStatus()==3){
+                        map.put("financeManager", processInstanceId);
+                        reimbursement.setStatus(4);
+                    }
+                }else {
+                    reimbursement.setStatus(4);
+                }
+                reimbursementService.updateReimbursement(reimbursement);
+            }
+        }else if ("请假申请".equals(type)){
+            TbLeaveApply leaveApply=leaveApplyService.searchLeaveApplyByInstanceId(processInstanceId);
+            if (leaveApply!=null){
+                map.put("result", result);
+                map.put("processInstanceId", processInstanceId);
+                if (Integer.valueOf(result) == 1) {
+                    if (leaveApply.getStatus()==1){
+                        map.put("financeManager", processInstanceId);
+                        leaveApply.setApprovalId(0);
+                        leaveApply.setStatus(2);
+                    }else if (leaveApply.getStatus()==2){
+                        map.put("financeManager", processInstanceId);
+                        leaveApply.setApprovalId(0);
+                        leaveApply.setStatus(3);
+                    }else if (leaveApply.getStatus()==3){
+                        map.put("financeManager", processInstanceId);
+                        leaveApply.setStatus(4);
+                    }
+                }else {
+                    leaveApply.setStatus(4);
+                }
+                leaveApplyService.updateLeaveApply(leaveApply);
+            }
         }
         taskService.complete(task.getId(), map);
     }

@@ -15,6 +15,19 @@ public interface ReimbursementService {
 
     /**
      * 查询费用报销待审批列表
+     * @param instanceId
+     * @return
+     */
+    TbReimbursement searchReimbursementByInstanceId(String instanceId);
+
+    /**
+     * 修改费用报销申请
+     * @param entity
+     */
+    void updateReimbursement(TbReimbursement entity);
+
+    /**
+     * 查询费用报销待审批列表
      *
      * @param instanceId
      * @param id

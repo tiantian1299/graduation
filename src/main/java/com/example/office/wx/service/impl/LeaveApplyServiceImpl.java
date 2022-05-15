@@ -1,7 +1,6 @@
 package com.example.office.wx.service.impl;
 
 import com.example.office.wx.db.mapper.TbLeaveApplyMapper;
-import com.example.office.wx.db.mapper.TbReimbursementMapper;
 import com.example.office.wx.db.mapper.TbUserMapper;
 import com.example.office.wx.db.pojo.TbLeaveApply;
 import com.example.office.wx.exception.OfficeException;
@@ -56,6 +55,28 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
      * 查询请假申请待办列表
      *
      * @param instanceId
+     * @return
+     */
+    @Override
+    public TbLeaveApply searchLeaveApplyByInstanceId(String instanceId) {
+        HashMap map = new HashMap<>();
+        map.put("instanceId", instanceId);
+        return tbLeaveApplyMapper.queryLeaveApplyByInstanceId(map);
+    }
+
+    /**
+     * 修改请假申请
+     * @param entity
+     */
+    @Override
+    public void updateLeaveApply(TbLeaveApply entity) {
+        tbLeaveApplyMapper.updateByPrimaryKeySelective(entity);
+    }
+
+    /**
+     * 查询请假申请待办列表
+     *
+     * @param instanceId
      * @param id
      * @return
      */
@@ -66,5 +87,15 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
         map.put("id", Integer.parseInt(id));
         HashMap result = tbLeaveApplyMapper.searchLeaveApplyByInstanceId(map);
         return result;
+    }
+
+    /**
+     * 根据请假申请id查询请假申请详情
+     * @param id
+     * @return
+     */
+    @Override
+    public TbLeaveApply searchLeaveApplyById(int id) {
+        return tbLeaveApplyMapper.selectByPrimaryKey(id);
     }
 }

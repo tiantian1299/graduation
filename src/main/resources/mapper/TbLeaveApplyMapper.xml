@@ -173,8 +173,8 @@
         select
         la.ID as id,
         la.`status`,
-        DATE_FORMAT(la.START_TIME,"%Y-%m-%d %h:%m") AS startTime,
-        DATE_FORMAT(la.END_TIME,"%Y-%m-%d %h:%m") AS endTime,
+        DATE_FORMAT(la.START_TIME,"%Y-%m-%d %H:%i") AS startTime,
+        DATE_FORMAT(la.END_TIME,"%Y-%m-%d %H:%i") AS endTime,
         la.LEAVE_DURATION as leaveDuration,
         u1.photo as creatorPhoto,
         u2.photo as approvalPhoto,
@@ -195,5 +195,9 @@
         where 1=1
         and la.INSTANCE_ID=#{instanceId}
         and la.APPROVAL_ID=#{id}
+    </select>
+
+    <select id="queryLeaveApplyByInstanceId" parameterType="map" resultType="com.example.office.wx.db.pojo.TbLeaveApply">
+        select la.* from tb_leave_apply la where 1=1 and la.INSTANCE_ID=#{instanceId}
     </select>
 </mapper>

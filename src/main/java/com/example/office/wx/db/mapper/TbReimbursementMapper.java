@@ -26,4 +26,11 @@ public interface TbReimbursementMapper {
      * @return
      */
     HashMap searchReimbursementByInstanceId(HashMap params);
+
+    /**
+     * 根据流程ID查询报销费用明细
+     * @param params
+     * @return
+     */
+    TbReimbursement queryReimbursementByInstanceId(HashMap params);
 }

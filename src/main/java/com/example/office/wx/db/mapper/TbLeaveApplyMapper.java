@@ -25,4 +25,11 @@ public interface TbLeaveApplyMapper {
      * @return
      */
     HashMap searchLeaveApplyByInstanceId(HashMap params);
+
+    /**
+     * 根据流程ID查询请假申请详情
+     * @param params
+     * @return
+     */
+    TbLeaveApply queryLeaveApplyByInstanceId(HashMap params);
 }

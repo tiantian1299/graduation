@@ -11,8 +11,6 @@ import com.example.office.wx.exception.OfficeException;
 import com.example.office.wx.service.LeaveApplyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.Logical;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +52,13 @@ public class LeaveApplyController {
         entity.setCreateTime(new Date());
         leaveApplyService.insertLeaveApply(entity);
         return R.ok().put("result", "success");
+    }
+
+    @GetMapping("/searchLeaveApplyById")
+    @ApiOperation("根据ID查询请假申请")
+    public R searchLeaveApplyById(@RequestParam Integer id) {
+        TbLeaveApply map = leaveApplyService.searchLeaveApplyById(id);
+        return R.ok().put("result", map);
     }
 
 }

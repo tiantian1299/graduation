@@ -17,13 +17,13 @@ import java.util.HashMap;
 @Slf4j
 public class ReimbursementServiceImpl implements ReimbursementService {
 
-    @Autowired
+    @Autowired(required = false)
     private TbReimbursementMapper tbReimbursementMapper;
 
     @Autowired
     private RuntimeService runtimeService;
 
-    @Autowired
+    @Autowired(required = false)
     private TbUserMapper tbUserMapper;
 
     /**
@@ -49,6 +49,27 @@ public class ReimbursementServiceImpl implements ReimbursementService {
         } else {
             throw new OfficeException("工作流启动失败");
         }
+    }
+
+    /**
+     * 查询费用报销待审批列表
+     * @param instanceId
+     * @return
+     */
+    @Override
+    public TbReimbursement searchReimbursementByInstanceId(String instanceId) {
+        HashMap map = new HashMap<>();
+        map.put("instanceId", instanceId);
+        return tbReimbursementMapper.queryReimbursementByInstanceId(map);
+    }
+
+    /**
+     * 修改费用报销申请
+     * @param entity
+     */
+    @Override
+    public void updateReimbursement(TbReimbursement entity) {
+        tbReimbursementMapper.updateByPrimaryKeySelective(entity);
     }
 
     /**

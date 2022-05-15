@@ -147,6 +147,10 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
 
+    <select id="queryReimbursementByInstanceId" parameterType="map" resultType="com.example.office.wx.db.pojo.TbReimbursement">
+        SELECT re.* FROM tb_reimbursement AS re WHERE 1=1 AND re.INSTANCE_ID=#{instanceId}
+    </select>
+
     <select id="searchReimbursementByInstanceId" parameterType="map" resultType="java.util.HashMap">
         SELECT
         re.*,
@@ -162,7 +166,11 @@
         LEFT JOIN tb_user AS u1 ON re.CREATE_ID = u1.id
         LEFT JOIN tb_user AS u2 ON re.APPROVAL_ID = u2.id
         WHERE 1=1
-        AND re.INSTANCE_ID=#{instanceId}
-        AND re.APPROVAL_ID=#{id}
+        <if test="instanceId != null">
+            AND re.INSTANCE_ID=#{instanceId}
+        </if>
+        <if test="id != null">
+            AND re.APPROVAL_ID=#{id}
+        </if>
     </select>
 </mapper>
