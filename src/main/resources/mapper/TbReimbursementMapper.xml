@@ -148,21 +148,21 @@
   </update>
 
     <select id="searchReimbursementByInstanceId" parameterType="map" resultType="java.util.HashMap">
-        select
+        SELECT
         re.*,
         u1.photo as creatorPhoto,
-        u2.photo as approvalPhoto,
+	    u2.photo as approvalPhoto,
         (case re.type
             when 1 then '采购经费'
             when 2 then '活动经费'
            end) as typeName,
         u1.`name` as creator,
         u2.name as approval
-        from tb_reimbursement re
-        join tb_user u1 on u1.id = re.CREATE_ID
-        join tb_user u2 on u2.id = re.APPROVAL_ID
-        where 1=1
-        and re.INSTANCE_ID=#{instanceId}
-        and re.APPROVAL_ID=#{id}
+        FROM tb_reimbursement AS re
+        LEFT JOIN tb_user AS u1 ON re.CREATE_ID = u1.id
+        LEFT JOIN tb_user AS u2 ON re.APPROVAL_ID = u2.id
+        WHERE 1=1
+        AND re.INSTANCE_ID=#{instanceId}
+        AND re.APPROVAL_ID=#{id}
     </select>
 </mapper>

@@ -21,4 +21,11 @@ public interface ReimbursementService {
      * @return
      */
     HashMap searchReimbursementByInstanceId(String instanceId, String id);
+
+    /**
+     * 根据费用报销id查询费用报销详情
+     * @param id
+     * @return
+     */
+    TbReimbursement searchReimbursementById(int id);
 }

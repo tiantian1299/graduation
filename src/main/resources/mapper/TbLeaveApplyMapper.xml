@@ -35,7 +35,7 @@
       LEAVE_DURATION, REASON, CREATOR_ID, 
       INSTANCE_ID, `STATUS`, ATTACHMENT, 
       CREATE_TIME, APPROVAL_ID)
-    values (#{leaveType,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+    values (#{leaveType,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
       #{leaveDuration,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER}, 
       #{instanceId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{attachment,jdbcType=VARCHAR},
       #{createTime,jdbcType=TIMESTAMP}, #{approvalId,jdbcType=INTEGER})
@@ -171,7 +171,11 @@
 
     <select id="searchLeaveApplyByInstanceId" parameterType="map" resultType="java.util.HashMap">
         select
-        la.*,
+        la.ID as id,
+        la.`status`,
+        DATE_FORMAT(la.START_TIME,"%Y-%m-%d %h:%m") AS startTime,
+        DATE_FORMAT(la.END_TIME,"%Y-%m-%d %h:%m") AS endTime,
+        la.LEAVE_DURATION as leaveDuration,
         u1.photo as creatorPhoto,
         u2.photo as approvalPhoto,
         (case la.LEAVE_TYPE
@@ -186,8 +190,8 @@
         u1.`name` as creator,
         u2.name as approval
         from tb_leave_apply la
-        join tb_user u1 on u1.id = la.CREATOR_ID
-        join tb_user u2 on u2.id = la.INSTANCE_ID
+        left join tb_user u1 on u1.id = la.CREATOR_ID
+        left join tb_user u2 on u2.id = la.APPROVAL_ID
         where 1=1
         and la.INSTANCE_ID=#{instanceId}
         and la.APPROVAL_ID=#{id}

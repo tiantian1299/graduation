@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/reimbursement")
@@ -44,5 +45,12 @@ public class ReimbursementController {
         entity.setCraeteTime(new Date());
         reimbursementService.insertReimbursement(entity);
         return R.ok().put("result", "success");
+    }
+
+    @GetMapping("/searchReimbursementById")
+    @ApiOperation("根据ID查询费用报销")
+    public R searchReimbursementById(@RequestParam Integer id) {
+        TbReimbursement map = reimbursementService.searchReimbursementById(id);
+        return R.ok().put("result", map);
     }
 }

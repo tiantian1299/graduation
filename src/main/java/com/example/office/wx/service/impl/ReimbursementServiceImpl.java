@@ -66,4 +66,14 @@ public class ReimbursementServiceImpl implements ReimbursementService {
         HashMap result = tbReimbursementMapper.searchReimbursementByInstanceId(map);
         return result;
     }
+
+    /**
+     * 根据费用报销id查询费用报销详情
+     * @param id
+     * @return
+     */
+    @Override
+    public TbReimbursement searchReimbursementById(int id) {
+        return tbReimbursementMapper.selectByPrimaryKey(id);
+    }
 }
