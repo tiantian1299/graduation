@@ -179,6 +179,43 @@
         u1.photo as creatorPhoto,
         u2.photo as approvalPhoto,
         (case la.LEAVE_TYPE
+        when 1 then '事假'
+        when 2 then '调休'
+        when 3 then '病假'
+        when 4 then '年假'
+        when 5 then '婚假'
+        when 6 then '产假'
+        when 7 then '丧假'
+        end) as typeName,
+        u1.`name` as creator,
+        u2.name as approval
+        from tb_leave_apply la
+        left join tb_user u1 on u1.id = la.CREATOR_ID
+        left join tb_user u2 on u2.id = la.APPROVAL_ID
+        where 1=1
+        <if test="instanceId != null">
+            and la.INSTANCE_ID=#{instanceId}
+        </if>
+        <if test="id != null">
+            and la.APPROVAL_ID=#{id}
+        </if>
+    </select>
+
+    <select id="queryLeaveApplyByInstanceId" parameterType="map"
+            resultType="com.example.office.wx.db.pojo.TbLeaveApply">
+        select la.* from tb_leave_apply la where 1=1 and la.INSTANCE_ID=#{instanceId}
+    </select>
+
+    <select id="searchLeaveApplyByUserId" parameterType="int" resultType="java.util.HashMap">
+        select
+        la.ID as id,
+        la.`status`,
+        DATE_FORMAT(la.START_TIME,"%Y-%m-%d %H:%i") AS startTime,
+        DATE_FORMAT(la.END_TIME,"%Y-%m-%d %H:%i") AS endTime,
+        la.LEAVE_DURATION as leaveDuration,
+        u1.photo as creatorPhoto,
+        u2.photo as approvalPhoto,
+        (case la.LEAVE_TYPE
             when 1 then '事假'
             when 2 then '调休'
             when 3 then '病假'
@@ -191,13 +228,9 @@
         u2.name as approval
         from tb_leave_apply la
         left join tb_user u1 on u1.id = la.CREATOR_ID
-        left join tb_user u2 on u2.id = la.APPROVAL_ID
-        where 1=1
-        and la.INSTANCE_ID=#{instanceId}
-        and la.APPROVAL_ID=#{id}
-    </select>
-
-    <select id="queryLeaveApplyByInstanceId" parameterType="map" resultType="com.example.office.wx.db.pojo.TbLeaveApply">
-        select la.* from tb_leave_apply la where 1=1 and la.INSTANCE_ID=#{instanceId}
+        left join act_hi_taskinst task on la.instance_id = task.PROC_INST_ID_
+        left join tb_user u2 on task.ASSIGNEE_ = u2.id
+        where la.CREATOR_ID = #{id}
+        order by la.STATUS
     </select>
 </mapper>

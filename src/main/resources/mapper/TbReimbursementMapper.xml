@@ -147,7 +147,8 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
 
-    <select id="queryReimbursementByInstanceId" parameterType="map" resultType="com.example.office.wx.db.pojo.TbReimbursement">
+    <select id="queryReimbursementByInstanceId" parameterType="map"
+            resultType="com.example.office.wx.db.pojo.TbReimbursement">
         SELECT re.* FROM tb_reimbursement AS re WHERE 1=1 AND re.INSTANCE_ID=#{instanceId}
     </select>
 
@@ -155,11 +156,11 @@
         SELECT
         re.*,
         u1.photo as creatorPhoto,
-	    u2.photo as approvalPhoto,
+        u2.photo as approvalPhoto,
         (case re.type
-            when 1 then '采购经费'
-            when 2 then '活动经费'
-           end) as typeName,
+        when 1 then '采购经费'
+        when 2 then '活动经费'
+        end) as typeName,
         u1.`name` as creator,
         u2.name as approval
         FROM tb_reimbursement AS re
@@ -173,4 +174,25 @@
             AND re.APPROVAL_ID=#{id}
         </if>
     </select>
+
+    <select id="searchReimbursementByUserId" parameterType="int" resultType="java.util.HashMap">
+        select
+        re.*,
+        u1.photo as creatorPhoto,
+        u2.photo as approvalPhoto,
+        (case re.type
+            when 1 then '采购经费'
+            when 2 then '活动经费'
+           end) as typeName,
+        u1.`name` as creator,
+        u2.name as approval
+        from tb_reimbursement re
+        left join tb_user u1 on u1.id = re.CREATE_ID
+        left join act_hi_taskinst task on re.instance_id = task.PROC_INST_ID_
+        left join tb_user u2 on task.ASSIGNEE_ = u2.id
+        where re.CREATE_ID = #{id}
+        order by re.STATUS
+    </select>
+
+
 </mapper>

@@ -3,6 +3,7 @@ package com.example.office.wx.db.mapper;
 import com.example.office.wx.db.pojo.TbLeaveApply;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Mapper
@@ -21,6 +22,7 @@ public interface TbLeaveApplyMapper {
 
     /**
      * 根据请假申请流程id查询请假申请信息
+     *
      * @param params
      * @return
      */
@@ -28,8 +30,17 @@ public interface TbLeaveApplyMapper {
 
     /**
      * 根据流程ID查询请假申请详情
+     *
      * @param params
      * @return
      */
     TbLeaveApply queryLeaveApplyByInstanceId(HashMap params);
+
+    /**
+     * 查询员工的请假申请列表
+     *
+     * @param id
+     * @return
+     */
+    ArrayList<HashMap> searchLeaveApplyByUserId(int id);
 }

@@ -19,7 +19,7 @@ public interface LeaveApplyService {
      * @param instanceId
      * @return
      */
-    TbLeaveApply searchLeaveApplyByInstanceId(String instanceId);
+    TbLeaveApply queryLeaveApplyByInstanceId(String instanceId);
 
     /**
      * 修改请假申请
@@ -35,6 +35,13 @@ public interface LeaveApplyService {
      * @return
      */
     HashMap searchLeaveApplyByInstanceId(String instanceId, String id);
+
+    /**
+     * 查询请假申请待办列表
+     * @param instanceId
+     * @return
+     */
+    HashMap searchLeaveApplyByInstanceId(String instanceId);
 
     /**
      * 根据请假申请id查询请假申请详情

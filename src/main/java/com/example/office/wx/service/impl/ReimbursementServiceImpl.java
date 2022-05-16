@@ -57,7 +57,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
      * @return
      */
     @Override
-    public TbReimbursement searchReimbursementByInstanceId(String instanceId) {
+    public TbReimbursement queryReimbursementByInstanceId(String instanceId) {
         HashMap map = new HashMap<>();
         map.put("instanceId", instanceId);
         return tbReimbursementMapper.queryReimbursementByInstanceId(map);
@@ -84,6 +84,20 @@ public class ReimbursementServiceImpl implements ReimbursementService {
         HashMap map = new HashMap<>();
         map.put("instanceId", instanceId);
         map.put("id", Integer.parseInt(id));
+        HashMap result = tbReimbursementMapper.searchReimbursementByInstanceId(map);
+        return result;
+    }
+
+    /**
+     * 查询费用报销待审批列表
+     *
+     * @param instanceId
+     * @return
+     */
+    @Override
+    public HashMap searchReimbursementByInstanceId(String instanceId) {
+        HashMap map = new HashMap<>();
+        map.put("instanceId", instanceId);
         HashMap result = tbReimbursementMapper.searchReimbursementByInstanceId(map);
         return result;
     }

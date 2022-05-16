@@ -18,7 +18,7 @@ public interface ReimbursementService {
      * @param instanceId
      * @return
      */
-    TbReimbursement searchReimbursementByInstanceId(String instanceId);
+    TbReimbursement queryReimbursementByInstanceId(String instanceId);
 
     /**
      * 修改费用报销申请
@@ -34,6 +34,14 @@ public interface ReimbursementService {
      * @return
      */
     HashMap searchReimbursementByInstanceId(String instanceId, String id);
+
+    /**
+     * 查询费用报销待审批列表
+     *
+     * @param instanceId
+     * @return
+     */
+    HashMap searchReimbursementByInstanceId(String instanceId);
 
     /**
      * 根据费用报销id查询费用报销详情

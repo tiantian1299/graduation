@@ -1,6 +1,8 @@
 package com.example.office.wx.service.impl;
 
+import com.example.office.wx.db.mapper.TbLeaveApplyMapper;
 import com.example.office.wx.db.mapper.TbMeetingMapper;
+import com.example.office.wx.db.mapper.TbReimbursementMapper;
 import com.example.office.wx.db.mapper.TbUserMapper;
 import com.example.office.wx.db.pojo.TbLeaveApply;
 import com.example.office.wx.db.pojo.TbReimbursement;
@@ -43,6 +45,12 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     @Autowired(required = false)
     TbMeetingMapper tbMeetingMapper;
+
+    @Autowired(required = false)
+    TbReimbursementMapper tbReimbursementMapper;
+
+    @Autowired(required = false)
+    TbLeaveApplyMapper tbLeaveApplyMapper;
 
     @Autowired(required = false)
     TbUserMapper tbUserMapper;
@@ -96,8 +104,8 @@ public class ApprovalServiceImpl implements ApprovalService {
             map.put("result", result);
             map.put("processInstanceId", processInstanceId);
         } else if ("费用报销".equals(type)) {
-            map.put("isManager","是");
-            TbReimbursement reimbursement = reimbursementService.searchReimbursementByInstanceId(processInstanceId);
+            map.put("isManager", "是");
+            TbReimbursement reimbursement = reimbursementService.queryReimbursementByInstanceId(processInstanceId);
             if (reimbursement != null) {
                 map.put("result", result);
                 map.put("processInstanceId", processInstanceId);
@@ -125,13 +133,13 @@ public class ApprovalServiceImpl implements ApprovalService {
                     }
                 } else {
                     map.put("identity", "0");
-                    reimbursement.setStatus(4);
+                    reimbursement.setStatus(5);
                 }
                 reimbursementService.updateReimbursement(reimbursement);
             }
         } else if ("请假申请".equals(type)) {
-            map.put("isManager","是");
-            TbLeaveApply leaveApply = leaveApplyService.searchLeaveApplyByInstanceId(processInstanceId);
+            map.put("isManager", "是");
+            TbLeaveApply leaveApply = leaveApplyService.queryLeaveApplyByInstanceId(processInstanceId);
             if (leaveApply != null) {
                 map.put("result", result);
                 map.put("processInstanceId", processInstanceId);
@@ -144,13 +152,13 @@ public class ApprovalServiceImpl implements ApprovalService {
                         leaveApply.setStatus(2);
                     } else if (leaveApply.getStatus() == 2) {
                         map.put("identity", "1");
-                        if (Integer.valueOf(leaveApply.getLeaveDuration())>=7){
+                        if (Integer.valueOf(leaveApply.getLeaveDuration()) >= 7) {
                             List<Integer> userIds = tbUserMapper.searchUserByRole(4);
                             map.put("generalManager", userIds.get(0));
                             map.put("identity2", "1");
                             leaveApply.setApprovalId(userIds.get(0));
                             leaveApply.setStatus(3);
-                        }else {
+                        } else {
                             map.put("identity2", "0");
                             leaveApply.setStatus(4);
                         }
@@ -159,7 +167,7 @@ public class ApprovalServiceImpl implements ApprovalService {
                     }
                 } else {
                     map.put("identity", "0");
-                    leaveApply.setStatus(4);
+                    leaveApply.setStatus(5);
                 }
                 leaveApplyService.updateLeaveApply(leaveApply);
             }
@@ -178,27 +186,62 @@ public class ApprovalServiceImpl implements ApprovalService {
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().processFinished().taskAssignee(operator).list();
         HashMap result = new HashMap();
         ArrayList<HashMap> meeting = new ArrayList<>();
+        ArrayList<HashMap> reimbursement = new ArrayList<>();
+        ArrayList<HashMap> leaveApply = new ArrayList<>();
+        HashMap meetingMap;
+        HashMap reimbursementMap;
+        HashMap leaveApplyMap;
         for (HistoricTaskInstance taskInstance : list) {
             String instanceId = taskInstance.getProcessInstanceId();
             String definitionId = taskInstance.getProcessDefinitionId();
             if (definitionId.contains("MeetingProcess")) {
                 //查询会议审批信息
-                HashMap map = meetingService.searchMeetByInstanceId(instanceId, operator);
-                if (map.isEmpty()) {
+                meetingMap = meetingService.searchMeetByInstanceId(instanceId, operator);
+                if (meetingMap==null) {
                     continue;
                 }
-                Integer status = (Integer) map.get("status");
+                Integer status = (Integer) meetingMap.get("status");
                 if (status.equals(2)) {
-                    map.put("result", "不同意");
-                    map.put("processStatus", "已结束");
+                    meetingMap.put("result", "不同意");
+                    meetingMap.put("processStatus", "已结束");
                 } else if (status.equals(3)) {
-                    map.put("result", "同意");
-                    map.put("processStatus", "已结束");
+                    meetingMap.put("result", "同意");
+                    meetingMap.put("processStatus", "已结束");
                 }
-                meeting.add(map);
+                meeting.add(meetingMap);
+            } else if (definitionId.contains("ReimbursementProcess")) {
+                reimbursementMap = reimbursementService.searchReimbursementByInstanceId(instanceId);
+                if (reimbursementMap==null) {
+                    continue;
+                }
+                Integer status = (Integer) reimbursementMap.get("STATUS");
+                if (status.equals(4)) {
+                    reimbursementMap.put("result", "同意");
+                    reimbursementMap.put("processStatus", "已结束");
+                } else if (status.equals(5)) {
+                    reimbursementMap.put("result", "不同意");
+                    reimbursementMap.put("processStatus", "已结束");
+                }
+                reimbursement.add(reimbursementMap);
+            } else if (definitionId.contains("LeaveApplyProcess")) {
+                leaveApplyMap = leaveApplyService.searchLeaveApplyByInstanceId(instanceId, operator);
+                if (leaveApplyMap==null) {
+                    continue;
+                }
+                Integer status = (Integer) leaveApplyMap.get("status");
+                if (status.equals(4)) {
+                    leaveApplyMap.put("result", "同意");
+                    leaveApplyMap.put("processStatus", "已结束");
+                } else if (status.equals(5)) {
+                    leaveApplyMap.put("result", "不同意");
+                    leaveApplyMap.put("processStatus", "已结束");
+                }
+                reimbursement.add(leaveApplyMap);
             }
         }
         result.put("meeting", meeting);
+        result.put("reimbursement", reimbursement);
+        result.put("leaveApply", leaveApply);
         return result;
     }
 
@@ -226,7 +269,37 @@ public class ApprovalServiceImpl implements ApprovalService {
                 meet.put("processStatus", "已结束");
             }
         }
+        ArrayList<HashMap> reimbursement = tbReimbursementMapper.searchReimbursementByUserId(id);
+        for (HashMap re : reimbursement) {
+            Integer status = (Integer) re.get("STATUS");
+            if (status.equals(4)) {
+                re.put("result", "同意");
+                re.put("processStatus", "已结束");
+            } else if (status.equals(5)) {
+                re.put("result", "不同意");
+                re.put("processStatus", "已结束");
+            } else {
+                re.put("status", "审批中");
+                re.put("processStatus", "未结束");
+            }
+        }
+        ArrayList<HashMap> leaveApply = tbLeaveApplyMapper.searchLeaveApplyByUserId(id);
+        for (HashMap la : leaveApply) {
+            Integer status = (Integer) la.get("status");
+            if (status.equals(4)) {
+                la.put("result", "同意");
+                la.put("processStatus", "已结束");
+            } else if (status.equals(5)) {
+                la.put("result", "不同意");
+                la.put("processStatus", "已结束");
+            } else {
+                la.put("status", "审批中");
+                la.put("processStatus", "未结束");
+            }
+        }
         result.put("meeting", meeting);
+        result.put("reimbursement", reimbursement);
+        result.put("leaveApply", leaveApply);
         return result;
     }
 }

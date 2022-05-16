@@ -58,7 +58,7 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
      * @return
      */
     @Override
-    public TbLeaveApply searchLeaveApplyByInstanceId(String instanceId) {
+    public TbLeaveApply queryLeaveApplyByInstanceId(String instanceId) {
         HashMap map = new HashMap<>();
         map.put("instanceId", instanceId);
         return tbLeaveApplyMapper.queryLeaveApplyByInstanceId(map);
@@ -85,6 +85,19 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
         HashMap map = new HashMap<>();
         map.put("instanceId", instanceId);
         map.put("id", Integer.parseInt(id));
+        HashMap result = tbLeaveApplyMapper.searchLeaveApplyByInstanceId(map);
+        return result;
+    }
+
+    /**
+     * 查询请假申请待办列表
+     * @param instanceId
+     * @return
+     */
+    @Override
+    public HashMap searchLeaveApplyByInstanceId(String instanceId) {
+        HashMap map = new HashMap<>();
+        map.put("instanceId", instanceId);
         HashMap result = tbLeaveApplyMapper.searchLeaveApplyByInstanceId(map);
         return result;
     }
