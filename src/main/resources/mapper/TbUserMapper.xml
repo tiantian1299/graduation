@@ -237,4 +237,7 @@
                  left join tb_user u2 on u1.dept_id = u2.dept_id
         where JSON_CONTAINS(u2.role,'1') and u1.id = #{id}
     </select>
+    <select id="searchUserByRole" parameterType="int" resultType="int">
+        select u1.id from tb_user u1 where JSON_CONTAINS(u1.role, (CAST(#{roleId} AS CHAR)))
+    </select>
 </mapper>

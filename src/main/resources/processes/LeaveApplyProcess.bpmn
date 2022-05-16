@@ -8,30 +8,30 @@
     <sequenceFlow id="flow2" sourceRef="usertask1" targetRef="exclusivegateway1"></sequenceFlow>
     <userTask id="usertask2" name="HR审批" activiti:assignee="${hrManager}" activiti:formKey="hrApproval"></userTask>
     <sequenceFlow id="flow3" name="同意" sourceRef="exclusivegateway1" targetRef="usertask2">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity='1'}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity=='1'}]]></conditionExpression>
     </sequenceFlow>
     <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow4" sourceRef="usertask2" targetRef="exclusivegateway2"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow5" name="同意" sourceRef="exclusivegateway2" targetRef="exclusivegateway3">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity='1'}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity=='1'}]]></conditionExpression>
     </sequenceFlow>
     <userTask id="usertask3" name="总经理审批" activiti:assignee="${generalManager}" activiti:formKey="generalApproval"></userTask>
     <sequenceFlow id="flow6" name="大于7天" sourceRef="exclusivegateway3" targetRef="usertask3">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity2='1'}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity2=='1'}]]></conditionExpression>
     </sequenceFlow>
     <serviceTask id="servicetask1" name="发送通知" activiti:class="com.example.office.wx.task.sendMessageTask"></serviceTask>
     <sequenceFlow id="flow7" sourceRef="usertask3" targetRef="servicetask1"></sequenceFlow>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow8" sourceRef="servicetask1" targetRef="endevent1"></sequenceFlow>
     <sequenceFlow id="flow9" name="不同意" sourceRef="exclusivegateway1" targetRef="servicetask1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity='0'}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity=='0'}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow10" name="不同意" sourceRef="exclusivegateway2" targetRef="servicetask1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity='0'}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity=='0'}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow11" name="小于7天" sourceRef="exclusivegateway3" targetRef="servicetask1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity2='0'}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${identity2=='0'}]]></conditionExpression>
     </sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_LeaveApplyProcess">

@@ -1,6 +1,7 @@
 package com.example.office.wx.service.impl;
 
 import com.example.office.wx.db.mapper.TbMeetingMapper;
+import com.example.office.wx.db.mapper.TbUserMapper;
 import com.example.office.wx.db.pojo.TbLeaveApply;
 import com.example.office.wx.db.pojo.TbReimbursement;
 import com.example.office.wx.service.ApprovalService;
@@ -42,6 +43,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     @Autowired(required = false)
     TbMeetingMapper tbMeetingMapper;
+
+    @Autowired(required = false)
+    TbUserMapper tbUserMapper;
 
     /**
      * 查询执行人的审批列表
@@ -91,48 +95,70 @@ public class ApprovalServiceImpl implements ApprovalService {
         if (type.equals("会议")) {
             map.put("result", result);
             map.put("processInstanceId", processInstanceId);
-        }else if ("费用报销".equals(type)){
-            TbReimbursement reimbursement=reimbursementService.searchReimbursementByInstanceId(processInstanceId);
-            if (reimbursement!=null){
+        } else if ("费用报销".equals(type)) {
+            map.put("isManager","是");
+            TbReimbursement reimbursement = reimbursementService.searchReimbursementByInstanceId(processInstanceId);
+            if (reimbursement != null) {
                 map.put("result", result);
                 map.put("processInstanceId", processInstanceId);
-                if (Integer.valueOf(result) == 1) {
-                    if (reimbursement.getStatus()==1){
-                        map.put("financeManager", processInstanceId);
-                        reimbursement.setApprovalId(0);
+                if ("同意".equals(result)) {
+                    if (reimbursement.getStatus() == 1) {
+                        List<Integer> userIds = tbUserMapper.searchUserByRole(5);
+                        map.put("financeManager", userIds.get(0));
+                        map.put("identity", "1");
+                        reimbursement.setApprovalId(userIds.get(0));
                         reimbursement.setStatus(2);
-                    }else if (reimbursement.getStatus()==2){
-                        map.put("financeManager", processInstanceId);
-                        reimbursement.setApprovalId(0);
-                        reimbursement.setStatus(3);
-                    }else if (reimbursement.getStatus()==3){
-                        map.put("financeManager", processInstanceId);
+                    } else if (reimbursement.getStatus() == 2) {
+                        map.put("identity", "1");
+                        if (reimbursement.getMoney() >= 30000) {
+                            List<Integer> userIds = tbUserMapper.searchUserByRole(4);
+                            map.put("generalManager", userIds.get(0));
+                            map.put("identity2", "1");
+                            reimbursement.setApprovalId(userIds.get(0));
+                            reimbursement.setStatus(3);
+                        } else {
+                            map.put("identity2", "0");
+                            reimbursement.setStatus(4);
+                        }
+                    } else if (reimbursement.getStatus() == 3) {
                         reimbursement.setStatus(4);
                     }
-                }else {
+                } else {
+                    map.put("identity", "0");
                     reimbursement.setStatus(4);
                 }
                 reimbursementService.updateReimbursement(reimbursement);
             }
-        }else if ("请假申请".equals(type)){
-            TbLeaveApply leaveApply=leaveApplyService.searchLeaveApplyByInstanceId(processInstanceId);
-            if (leaveApply!=null){
+        } else if ("请假申请".equals(type)) {
+            map.put("isManager","是");
+            TbLeaveApply leaveApply = leaveApplyService.searchLeaveApplyByInstanceId(processInstanceId);
+            if (leaveApply != null) {
                 map.put("result", result);
                 map.put("processInstanceId", processInstanceId);
-                if (Integer.valueOf(result) == 1) {
-                    if (leaveApply.getStatus()==1){
-                        map.put("financeManager", processInstanceId);
-                        leaveApply.setApprovalId(0);
+                if ("同意".equals(result)) {
+                    if (leaveApply.getStatus() == 1) {
+                        List<Integer> userIds = tbUserMapper.searchUserByRole(6);
+                        map.put("hrManager", userIds.get(0));
+                        map.put("identity", "1");
+                        leaveApply.setApprovalId(userIds.get(0));
                         leaveApply.setStatus(2);
-                    }else if (leaveApply.getStatus()==2){
-                        map.put("financeManager", processInstanceId);
-                        leaveApply.setApprovalId(0);
-                        leaveApply.setStatus(3);
-                    }else if (leaveApply.getStatus()==3){
-                        map.put("financeManager", processInstanceId);
+                    } else if (leaveApply.getStatus() == 2) {
+                        map.put("identity", "1");
+                        if (Integer.valueOf(leaveApply.getLeaveDuration())>=7){
+                            List<Integer> userIds = tbUserMapper.searchUserByRole(4);
+                            map.put("generalManager", userIds.get(0));
+                            map.put("identity2", "1");
+                            leaveApply.setApprovalId(userIds.get(0));
+                            leaveApply.setStatus(3);
+                        }else {
+                            map.put("identity2", "0");
+                            leaveApply.setStatus(4);
+                        }
+                    } else if (leaveApply.getStatus() == 3) {
                         leaveApply.setStatus(4);
                     }
-                }else {
+                } else {
+                    map.put("identity", "0");
                     leaveApply.setStatus(4);
                 }
                 leaveApplyService.updateLeaveApply(leaveApply);

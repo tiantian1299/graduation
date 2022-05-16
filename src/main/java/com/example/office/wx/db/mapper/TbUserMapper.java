@@ -138,4 +138,11 @@ public interface TbUserMapper {
      * @return
      */
     int searchDeptManger(int id);
+
+    /**
+     * 通过角色查询用户信息
+     * @param roleId
+     * @return
+     */
+    List<Integer> searchUserByRole(int roleId);
 }
