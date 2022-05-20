@@ -18,7 +18,7 @@ public class TbItemCollection implements Serializable {
     /**
      * 物品名称
      */
-    private String itemName;
+    private Integer itemName;
 
     /**
      * 数量
@@ -33,7 +33,7 @@ public class TbItemCollection implements Serializable {
     /**
      * 领用人
      */
-    private Integer createId;
+    private Object receivers;
 
     /**
      * 受理人

@@ -3,15 +3,15 @@
 <mapper namespace="com.example.office.wx.db.mapper.TbItemCollectionMapper">
   <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.TbItemCollection">
     <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="ITEM_NAME" jdbcType="VARCHAR" property="itemName" />
+    <result column="ITEM_NAME" jdbcType="INTEGER" property="itemName" />
     <result column="COUNT" jdbcType="INTEGER" property="count" />
     <result column="USE" jdbcType="VARCHAR" property="use" />
-    <result column="CREATE_ID" jdbcType="INTEGER" property="createId" />
+    <result column="RECEIVERS" jdbcType="OTHER" property="receivers" />
     <result column="HANDLE_ID" jdbcType="INTEGER" property="handleId" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    ID, ITEM_NAME, `COUNT`, `USE`, CREATE_ID, HANDLE_ID, CREATE_TIME
+    ID, ITEM_NAME, `COUNT`, `USE`, RECEIVERS, HANDLE_ID, CREATE_TIME
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -25,10 +25,10 @@
   </delete>
   <insert id="insert" keyColumn="ID" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbItemCollection" useGeneratedKeys="true">
     insert into tb_item_collection (ITEM_NAME, `COUNT`, `USE`, 
-      CREATE_ID, HANDLE_ID, CREATE_TIME
+      RECEIVERS, HANDLE_ID, CREATE_TIME
       )
-    values (#{itemName,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{use,jdbcType=VARCHAR}, 
-      #{createId,jdbcType=INTEGER}, #{handleId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+    values (#{itemName,jdbcType=INTEGER}, #{count,jdbcType=INTEGER}, #{use,jdbcType=VARCHAR}, 
+      #{receivers,jdbcType=OTHER}, #{handleId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="ID" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbItemCollection" useGeneratedKeys="true">
@@ -43,8 +43,8 @@
       <if test="use != null">
         `USE`,
       </if>
-      <if test="createId != null">
-        CREATE_ID,
+      <if test="receivers != null">
+        RECEIVERS,
       </if>
       <if test="handleId != null">
         HANDLE_ID,
@@ -55,7 +55,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="itemName != null">
-        #{itemName,jdbcType=VARCHAR},
+        #{itemName,jdbcType=INTEGER},
       </if>
       <if test="count != null">
         #{count,jdbcType=INTEGER},
@@ -63,8 +63,8 @@
       <if test="use != null">
         #{use,jdbcType=VARCHAR},
       </if>
-      <if test="createId != null">
-        #{createId,jdbcType=INTEGER},
+      <if test="receivers != null">
+        #{receivers,jdbcType=OTHER},
       </if>
       <if test="handleId != null">
         #{handleId,jdbcType=INTEGER},
@@ -78,7 +78,7 @@
     update tb_item_collection
     <set>
       <if test="itemName != null">
-        ITEM_NAME = #{itemName,jdbcType=VARCHAR},
+        ITEM_NAME = #{itemName,jdbcType=INTEGER},
       </if>
       <if test="count != null">
         `COUNT` = #{count,jdbcType=INTEGER},
@@ -86,8 +86,8 @@
       <if test="use != null">
         `USE` = #{use,jdbcType=VARCHAR},
       </if>
-      <if test="createId != null">
-        CREATE_ID = #{createId,jdbcType=INTEGER},
+      <if test="receivers != null">
+        RECEIVERS = #{receivers,jdbcType=OTHER},
       </if>
       <if test="handleId != null">
         HANDLE_ID = #{handleId,jdbcType=INTEGER},
@@ -100,10 +100,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbItemCollection">
     update tb_item_collection
-    set ITEM_NAME = #{itemName,jdbcType=VARCHAR},
+    set ITEM_NAME = #{itemName,jdbcType=INTEGER},
       `COUNT` = #{count,jdbcType=INTEGER},
       `USE` = #{use,jdbcType=VARCHAR},
-      CREATE_ID = #{createId,jdbcType=INTEGER},
+      RECEIVERS = #{receivers,jdbcType=OTHER},
       HANDLE_ID = #{handleId,jdbcType=INTEGER},
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=INTEGER}

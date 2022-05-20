@@ -14,7 +14,6 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,7 +204,7 @@ public class ApprovalServiceImpl implements ApprovalService {
                 if (status.equals(2)) {
                     meetingMap.put("result", "不同意");
                     meetingMap.put("processStatus", "已结束");
-                } else if (status.equals(3)) {
+                }else{
                     meetingMap.put("result", "同意");
                     meetingMap.put("processStatus", "已结束");
                 }
@@ -271,7 +270,7 @@ public class ApprovalServiceImpl implements ApprovalService {
             if (status.equals(2)) {
                 meet.put("result", "不同意");
                 meet.put("processStatus", "已结束");
-            } else if (status.equals(3)) {
+            } else {
                 meet.put("result", "同意");
                 meet.put("processStatus", "已结束");
             }
