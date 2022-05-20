@@ -3,6 +3,9 @@ package com.example.office.wx.db.mapper;
 import com.example.office.wx.db.pojo.TbAssets;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 @Mapper
 public interface TbAssetsMappper {
     int deleteByPrimaryKey(Integer id);
@@ -16,4 +19,6 @@ public interface TbAssetsMappper {
     int updateByPrimaryKeySelective(TbAssets record);
 
     int updateByPrimaryKey(TbAssets record);
+
+    ArrayList<TbAssets> getAssetsList(HashMap map);
 }
