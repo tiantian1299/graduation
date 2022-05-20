@@ -228,9 +228,8 @@
         u2.name as approval
         from tb_leave_apply la
         left join tb_user u1 on u1.id = la.CREATOR_ID
-        left join act_hi_taskinst task on la.instance_id = task.PROC_INST_ID_
-        left join tb_user u2 on task.ASSIGNEE_ = u2.id
+        left join tb_user u2 on la.APPROVAL_ID = u2.id
         where la.CREATOR_ID = #{id}
-        order by la.STATUS
+        order by la.STATUS,la.CREATE_TIME desc
     </select>
 </mapper>

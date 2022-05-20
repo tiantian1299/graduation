@@ -14,6 +14,7 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,7 +184,7 @@ public class ApprovalServiceImpl implements ApprovalService {
      */
     @Override
     public HashMap getApprovaledList(String operator) {
-        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().processFinished().taskAssignee(operator).list();
+        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(operator).finished().list();
         HashMap result = new HashMap();
         ArrayList<HashMap> meeting = new ArrayList<>();
         ArrayList<HashMap> reimbursement = new ArrayList<>();
@@ -221,10 +222,13 @@ public class ApprovalServiceImpl implements ApprovalService {
                 } else if (status.equals(5)) {
                     reimbursementMap.put("result", "不同意");
                     reimbursementMap.put("processStatus", "已结束");
+                }else {
+                    reimbursementMap.put("status", "审批中");
+                    reimbursementMap.put("processStatus", "未结束");
                 }
                 reimbursement.add(reimbursementMap);
             } else if (definitionId.contains("LeaveApplyProcess")) {
-                leaveApplyMap = leaveApplyService.searchLeaveApplyByInstanceId(instanceId, operator);
+                leaveApplyMap = leaveApplyService.searchLeaveApplyByInstanceId(instanceId);
                 if (leaveApplyMap==null) {
                     continue;
                 }
@@ -235,8 +239,11 @@ public class ApprovalServiceImpl implements ApprovalService {
                 } else if (status.equals(5)) {
                     leaveApplyMap.put("result", "不同意");
                     leaveApplyMap.put("processStatus", "已结束");
+                }else {
+                    leaveApplyMap.put("status", "审批中");
+                    leaveApplyMap.put("processStatus", "未结束");
                 }
-                reimbursement.add(leaveApplyMap);
+                leaveApply.add(leaveApplyMap);
             }
         }
         result.put("meeting", meeting);

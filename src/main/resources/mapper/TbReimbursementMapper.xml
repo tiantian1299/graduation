@@ -188,10 +188,9 @@
         u2.name as approval
         from tb_reimbursement re
         left join tb_user u1 on u1.id = re.CREATE_ID
-        left join act_hi_taskinst task on re.instance_id = task.PROC_INST_ID_
-        left join tb_user u2 on task.ASSIGNEE_ = u2.id
+        left join tb_user u2 on re.APPROVAL_ID = u2.id
         where re.CREATE_ID = #{id}
-        order by re.STATUS
+        order by re.STATUS,re.CRAETE_TIME desc
     </select>
 
 
