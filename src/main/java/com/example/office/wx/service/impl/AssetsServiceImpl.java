@@ -19,6 +19,7 @@ public class AssetsServiceImpl implements AssetsService {
 
     /**
      * 分页查询采购申请信息
+     *
      * @param param
      * @return
      */
@@ -30,10 +31,42 @@ public class AssetsServiceImpl implements AssetsService {
 
     /**
      * 入库
+     *
      * @param entity
      */
     @Override
     public void insertAssets(TbAssets entity) {
         tbAssetsMappper.insertSelective(entity);
+    }
+
+    /**
+     * 根据主键查询采购申请信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public TbAssets searchAssetsById(int id) {
+        return tbAssetsMappper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 修改库存信息
+     *
+     * @param entity
+     */
+    @Override
+    public void updateAssets(TbAssets entity) {
+        tbAssetsMappper.updateByPrimaryKeySelective(entity);
+    }
+
+    /**
+     * 删除库存信息
+     *
+     * @param id
+     */
+    @Override
+    public void deleteAssetsById(Integer id) {
+        tbAssetsMappper.deleteByPrimaryKey(id);
     }
 }

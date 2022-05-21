@@ -2,12 +2,16 @@ package com.example.office.wx.controller;
 
 import com.example.office.wx.common.util.R;
 import com.example.office.wx.config.shiro.JwtUtil;
+import com.example.office.wx.controller.form.DeleteForm;
 import com.example.office.wx.controller.form.InsertAssetsForm;
 import com.example.office.wx.controller.form.SearchPageForm;
+import com.example.office.wx.controller.form.UpdateAssetsForm;
 import com.example.office.wx.db.pojo.TbAssets;
 import com.example.office.wx.service.AssetsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +54,32 @@ public class AssetsController {
         entity.setCreatorId(jwtUtil.getUserId(token));
 
         assetsService.insertAssets(entity);
+        return R.ok().put("result", "success");
+    }
+
+    @GetMapping("/searchAssetsById")
+    @ApiOperation("根据ID查询会议")
+    public R searchAssetsById(@RequestParam Integer id) {
+        TbAssets entity = assetsService.searchAssetsById(id);
+        return R.ok().put("result", entity);
+    }
+
+    @PostMapping("/editAssets")
+    @ApiOperation("修改入库信息")
+    public R editAssets(@Valid @RequestBody UpdateAssetsForm form, @RequestHeader("token") String token) {
+        TbAssets entity = new TbAssets();
+        entity.setId(form.getId());
+        entity.setAssetsName(form.getAssetsName());
+        entity.setInventory(form.getInventory());
+        entity.setCreatorId(jwtUtil.getUserId(token));
+        assetsService.updateAssets(entity);
+        return R.ok().put("result", "success");
+    }
+
+    @PostMapping("/deleteAssetsById")
+    @ApiOperation("根据ID删除入库信息")
+    public R deleteAssetsById(@RequestBody DeleteForm form) {
+        assetsService.deleteAssetsById(form.getId());
         return R.ok().put("result", "success");
     }
 }

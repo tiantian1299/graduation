@@ -103,5 +103,8 @@ tencent:
     secretKey: d1A6oIYaO9nDPO9eveBVbU9evzpTrztX
     region: ap-beijing
     bucket: office-1308321421
-
+trtc:
+  appId: 1400603955
+  secretKey: 54f44dd26c1e7365ea206c70f91237dcb3c7de71a9056a2b3a32d3c3ebb92af2
+  expire: 86400
 
