@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -68,5 +69,14 @@ public class AssetsServiceImpl implements AssetsService {
     @Override
     public void deleteAssetsById(Integer id) {
         tbAssetsMappper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 查询库存列表
+     * @return
+     */
+    @Override
+    public ArrayList<TbAssets> searchAssetsList() {
+        return tbAssetsMappper.searchAssetsList();
     }
 }

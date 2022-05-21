@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Mapper
 public interface TbAssetsMappper {
@@ -21,4 +22,6 @@ public interface TbAssetsMappper {
     int updateByPrimaryKey(TbAssets record);
 
     ArrayList<TbAssets> getAssetsList(HashMap map);
+
+    ArrayList<TbAssets>searchAssetsList();
 }

@@ -82,4 +82,11 @@ public class AssetsController {
         assetsService.deleteAssetsById(form.getId());
         return R.ok().put("result", "success");
     }
+
+    @GetMapping("/searchAssetsList")
+    @ApiOperation("查询采购申请列表")
+    public R searchAssetsList() {
+        ArrayList list = assetsService.searchAssetsList();
+        return R.ok().put("result", list);
+    }
 }

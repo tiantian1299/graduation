@@ -1,82 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.office.wx.db.mapper.TbAssetsMappper">
-  <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.TbAssets">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="ASSETS_NAME" jdbcType="VARCHAR" property="assetsName" />
-    <result column="INVENTORY" jdbcType="INTEGER" property="inventory" />
-    <result column="CREATOR_ID" jdbcType="INTEGER" property="creatorId" />
-    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.example.office.wx.db.pojo.TbAssets">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="ASSETS_NAME" jdbcType="VARCHAR" property="assetsName"/>
+        <result column="INVENTORY" jdbcType="INTEGER" property="inventory"/>
+        <result column="CREATOR_ID" jdbcType="INTEGER" property="creatorId"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, ASSETS_NAME, INVENTORY, CREATOR_ID, CREATE_TIME
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tb_assets
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_assets
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_assets
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbAssets" useGeneratedKeys="true">
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbAssets"
+            useGeneratedKeys="true">
     insert into tb_assets (ASSETS_NAME, INVENTORY, CREATOR_ID, 
       CREATE_TIME)
     values (#{assetsName,jdbcType=VARCHAR}, #{inventory,jdbcType=INTEGER}, #{creatorId,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbAssets" useGeneratedKeys="true">
-    insert into tb_assets
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="assetsName != null">
-        ASSETS_NAME,
-      </if>
-      <if test="inventory != null">
-        INVENTORY,
-      </if>
-      <if test="creatorId != null">
-        CREATOR_ID,
-      </if>
-      <if test="createTime != null">
-        CREATE_TIME,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="assetsName != null">
-        #{assetsName,jdbcType=VARCHAR},
-      </if>
-      <if test="inventory != null">
-        #{inventory,jdbcType=INTEGER},
-      </if>
-      <if test="creatorId != null">
-        #{creatorId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.office.wx.db.pojo.TbAssets">
-    update tb_assets
-    <set>
-      <if test="assetsName != null">
-        ASSETS_NAME = #{assetsName,jdbcType=VARCHAR},
-      </if>
-      <if test="inventory != null">
-        INVENTORY = #{inventory,jdbcType=INTEGER},
-      </if>
-      <if test="creatorId != null">
-        CREATOR_ID = #{creatorId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbAssets">
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.office.wx.db.pojo.TbAssets"
+            useGeneratedKeys="true">
+        insert into tb_assets
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="assetsName != null">
+                ASSETS_NAME,
+            </if>
+            <if test="inventory != null">
+                INVENTORY,
+            </if>
+            <if test="creatorId != null">
+                CREATOR_ID,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="assetsName != null">
+                #{assetsName,jdbcType=VARCHAR},
+            </if>
+            <if test="inventory != null">
+                #{inventory,jdbcType=INTEGER},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.office.wx.db.pojo.TbAssets">
+        update tb_assets
+        <set>
+            <if test="assetsName != null">
+                ASSETS_NAME = #{assetsName,jdbcType=VARCHAR},
+            </if>
+            <if test="inventory != null">
+                INVENTORY = #{inventory,jdbcType=INTEGER},
+            </if>
+            <if test="creatorId != null">
+                CREATOR_ID = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.example.office.wx.db.pojo.TbAssets">
     update tb_assets
     set ASSETS_NAME = #{assetsName,jdbcType=VARCHAR},
       INVENTORY = #{inventory,jdbcType=INTEGER},
@@ -85,9 +87,14 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="getAssetsList" parameterType="map"
-          resultType="com.example.office.wx.db.pojo.TbAssets">
+    <select id="getAssetsList" parameterType="map"
+            resultType="com.example.office.wx.db.pojo.TbAssets">
         select s.* from tb_assets as s where 1=1 order by CREATE_TIME desc
         LIMIT #{start},#{length}
+    </select>
+
+    <select id="searchAssetsList" parameterType="map"
+            resultType="com.example.office.wx.db.pojo.TbAssets">
+        select s.* from tb_assets as s where 1=1 and s.INVENTORY>0
     </select>
 </mapper>

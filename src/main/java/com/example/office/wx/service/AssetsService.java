@@ -4,6 +4,7 @@ import com.example.office.wx.db.pojo.TbAssets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public interface AssetsService {
 
@@ -43,4 +44,10 @@ public interface AssetsService {
      * @param id
      */
     void deleteAssetsById(Integer id);
+
+    /**
+     * 查询库存列表
+     * @return
+     */
+    ArrayList<TbAssets>searchAssetsList();
 }

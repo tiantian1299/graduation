@@ -108,4 +108,19 @@
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getItemCollectionList" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        s.*,
+        GROUP_CONCAT( u2.name ) as receiverNames
+        FROM
+        tb_item_collection AS tc
+        LEFT JOIN tb_assets AS s ON tc.ITEM_NAME = s.id
+        LEFT JOIN tb_user u2 ON JSON_CONTAINS(tc.RECEIVERS, (CAST(u2.id AS CHAR)))
+        WHERE
+        1 = 1
+        group by tc.ID
+        ORDER BY tc.CREATE_TIME DESC
+        LIMIT #{start},#{length}
+    </select>
 </mapper>
