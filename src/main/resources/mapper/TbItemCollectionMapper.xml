@@ -111,7 +111,8 @@
 
   <select id="getItemCollectionList" parameterType="map" resultType="java.util.HashMap">
         SELECT
-        s.*,
+        tc.*,
+        s.ASSETS_NAME as assetsName,
         GROUP_CONCAT( u2.name ) as receiverNames
         FROM
         tb_item_collection AS tc
@@ -122,5 +123,26 @@
         group by tc.ID
         ORDER BY tc.CREATE_TIME DESC
         LIMIT #{start},#{length}
+    </select>
+
+  <select id="searchItemCollectionById" parameterType="int" resultType="java.util.HashMap">
+        SELECT
+        ic.*,
+        a.ASSETS_NAME AS assetsName
+        FROM tb_item_collection AS ic
+        LEFT JOIN tb_assets AS a ON ic.ITEM_NAME=a.id
+        WHERE 1=1
+        AND ic.ID = #{id}
+    </select>
+
+  <select id="searchItemCollectionMembers" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        u.id, u.name, u.photo
+        FROM
+        tb_item_collection AS ic
+        JOIN tb_user u ON JSON_CONTAINS(ic.RECEIVERS, CAST(u.id AS CHAR))
+        WHERE 1=1
+        AND ic.ID = #{id}
+        AND u.status = 1
     </select>
 </mapper>

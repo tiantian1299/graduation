@@ -21,4 +21,8 @@ public interface TbItemCollectionMapper {
     int updateByPrimaryKey(TbItemCollection record);
 
     ArrayList<HashMap> getItemCollectionList(HashMap map);
+
+    HashMap searchItemCollectionById(Integer id);
+
+    ArrayList<HashMap> searchItemCollectionMembers(int id);
 }
